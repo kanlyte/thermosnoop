@@ -1,0 +1,48 @@
+General setup of the project.
+Clone the folder server from github repo
+have node.js installed in your machine. intsall the latest version
+open the project with any prefered text editor say vscode
+open its terminal and/ or navigate to the project on cmd and place npm i
+this will install all the dependences and node modules
+create a .env file
+add the database configuration files basing on the database that you wil have created on your local server.
+There after start the project by placing mpn run dev
+after a successfull starting of the project, it should bring
+
+server started on port 8081
+database is connected
+
+api routing
+all endpoints are in a format of api/ eg api/login
+all apis are in the folder api/
+
+simply, when you want to use any endpoint, navigate to api/anyfile say api/farm.
+look for the route that you need eg for creating a firm its /farm
+
+then the endpoint to call shall be api/farm eg on localhost it will be http://localhost:8081/api/farm this can be run from postman
+
+Note
+All user routes are placed in api/auth
+
+available endpoints ready for consumption
+/api/ default route
+/api/account creating a user
+/api/login login user
+/api/update/user updating user info
+api/farm adding a new farm
+
+HTTP STATUS RESPONSES
+code meaning application
+200 ok sucessfull request eg getting users
+201 created eg on creating a user or a farm
+404 Not Found eg user not found
+409 conflict eg user already registered
+400 Bad request eg missing info eg wrong email format
+500 Internal Server error eg network issues or browser and server issues
+
+Update User Route ---- endpoint is api/update/user
+it checks for the validity of the access token, if the access token is provided but expired, it issues a new token basing on the refresh token.
+returns 400 on wrong formarts of email and tel,
+200 ok on successful update
+404 user not found
+500 internal server error
