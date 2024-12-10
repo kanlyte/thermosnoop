@@ -96,9 +96,14 @@ router.post("/login", async (req, res) => {
       } else {
         //check if email is verified
         if (user.verified != true) {
-          res.status(404).json({
-            status: false,
+          res.status(200).json({
+            status: true,
             data: "email not verified",
+            emailNotVerified: true,
+            user: {
+              id: user.id,
+              email: user.email,
+            },
           });
         } else {
           //decrypt users passowrd
