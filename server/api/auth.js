@@ -302,7 +302,7 @@ router.post("/request/otp", async (req, res) => {
 
         // Configure message
         const mail = {
-          from: "Thermosnoop",
+          from: `"Thermosnoop"<kanlyteug@gmail.com>`,
           to: user.email,
           subject: "OTP for email verification",
           text: `Hello ${user.last_name}, Your OTP is: ${saveOtp.otp} Please note that it is valid for 3 minutes.`,
