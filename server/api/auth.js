@@ -290,14 +290,14 @@ router.post("/request/otp", async (req, res) => {
         const mail_transporter = nodemailer.createTransport({
           service: "gmail",
           auth: {
-            user: "beaconhostels@gmail.com",
-            pass: "wttdwlapdndotjtm",
+            user: "kanlyteug@gmail.com",
+            pass: "kkcvsaypbtgjwjvx",
           },
         });
 
         // Configure message
         const mail = {
-          from: `"Thermosnoop" <system.thermosnoop.com>`,
+          from: "Thermosnoop",
           to: user.email,
           subject: "OTP for email verification",
           text: `Hello ${user.last_name}, Your OTP is: ${saveOtp.otp} Please note that it is valid for 3 minutes.`,
@@ -314,6 +314,7 @@ router.post("/request/otp", async (req, res) => {
           };
           res.status(200).json(forward_result);
         } catch (error) {
+          console.log(error);
           // console.error("Error sending email:", error); // Log email sending error
           const forward_result = {
             status: false,
