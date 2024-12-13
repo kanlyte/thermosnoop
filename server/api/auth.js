@@ -323,7 +323,7 @@ router.post("/request/otp", async (req, res) => {
           // console.error("Error sending email:", error); // Log email sending error
           const forward_result = {
             status: false,
-            reason: "Server error",
+            reason: error,
           };
           res.status(500).json(forward_result);
         }
@@ -339,9 +339,9 @@ router.post("/request/otp", async (req, res) => {
     // console.error("Unhandled server error:", error); // Log any unexpected errors
     const forward_result = {
       status: false,
-      reason: "server error",
+      reason: error,
     };
-    res.json(forward_result);
+    res.status(500).json(forward_result);
   }
 });
 
