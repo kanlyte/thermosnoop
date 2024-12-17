@@ -470,13 +470,12 @@ router.get(
 );
 
 // Route to get weather logs of a farm for the previous 7 days
-router.get(
+router.post(
   "/farmlogs/last7days/:farm_id",
   // verifyToken,
   async (req, res) => {
-    const farmId = req.params.farm_id;
-
     try {
+      const farmId = req.params.farm_id;
       // Calculate the date 7 days ago
       const sevenDaysAgo = new Date();
       sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
