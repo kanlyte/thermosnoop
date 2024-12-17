@@ -391,7 +391,7 @@ router.post("/weather/check", async (req, res) => {
 });
 
 //get weather logs given data from user instead
-router.get("/weather/check/guest", async (req, res) => {
+router.post("/weather/check/guest", async (req, res) => {
   try {
     const { temp, hum } = req.body;
     if (temp == null || hum == null) {
@@ -470,7 +470,7 @@ router.get(
 );
 
 // Route to get weather logs of a farm for the previous 7 days
-router.post(
+router.get(
   "/farmlogs/last7days/:farm_id",
   // verifyToken,
   async (req, res) => {
