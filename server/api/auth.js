@@ -429,7 +429,7 @@ router.put("/verify/email/:user_id", async (req, res) => {
  *
  ****/
 /** verify otp **/
-router.get("/verify/otp/:user_id", async (req, res) => {
+router.post("/verify/otp/:user_id", async (req, res) => {
   try {
     const { user_id } = req.params;
     const { otp } = req.body;
