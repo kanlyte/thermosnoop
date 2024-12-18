@@ -225,7 +225,7 @@ const AddFarm = ({ navigation }) => {
                     onFail={error => console.error(error)}
                     onNotFound={() => console.log('No results found')}
                     onLoading={() => console.log('Loading...')}
-                    listLoaderComponent={() => (
+                    listLoaderComponent={
                         <View
                             style={{
                                 alignItems: 'center',
@@ -237,7 +237,7 @@ const AddFarm = ({ navigation }) => {
                                 Searching for places ...
                             </Text>
                         </View>
-                    )}
+                    }
                     styles={{
                         textInputContainer: {
                             width: '100%',
@@ -266,7 +266,7 @@ const AddFarm = ({ navigation }) => {
                         placeholderTextColor: 'gray',
                         placeholder: 'Enter location',
                     }}
-                    listEmptyComponent={() => (
+                    listEmptyComponent={
                         <View
                             style={{
                                 alignItems: 'center',
@@ -278,7 +278,7 @@ const AddFarm = ({ navigation }) => {
                                 No areas found
                             </Text>
                         </View>
-                    )}
+                    }
                 />
             </View>
             {!farm.latitude ? (
