@@ -382,6 +382,7 @@ router.put("/verify/email/:user_id", async (req, res) => {
   try {
     const { user_id } = req.params;
     const { otp } = req.body;
+    console.log(otp);
 
     // Fetch the most recent OTP for the user
     const otpRecord = await Otp.findOne({
