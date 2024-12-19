@@ -1,0 +1,2 @@
+import { axiosPrivate } from "./axiosService"
+
