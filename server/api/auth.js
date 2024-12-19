@@ -266,13 +266,17 @@ router.post("/request/otp", async (req, res) => {
         });
       } else {
         // Utility function to generate OTP
-        // Utility function to generate OTP
         function generateOTP(length) {
           const digits = "0123456789";
           let otp = "";
-          for (let i = 0; i < length; i++) {
-            otp += digits[Math.floor(Math.random() * 10)];
-          }
+
+          do {
+            otp = "";
+            for (let i = 0; i < length; i++) {
+              otp += digits[Math.floor(Math.random() * 10)];
+            }
+          } while (otp.startsWith("0"));
+
           return otp;
         }
 
