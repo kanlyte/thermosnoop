@@ -415,7 +415,9 @@ router.put("/verify/email/:user_id", async (req, res) => {
     user.verified = true;
     await user.save();
 
-    return res.status(200).json({ status: true, reason: "Email verified" });
+    return res
+      .status(200)
+      .json({ status: true, data: otp, reason: "Email verified" });
   } catch (error) {
     console.error("Error verifying OTP:", error);
     return res.status(500).json({ status: false, reason: "Server error" });
