@@ -235,34 +235,34 @@ router.put("/update/farm/:id", verifyToken, tokenRefresh, async (req, res) => {
 
 // Function to calculate discomfort level based on thermo stress value
 function getDiscomfortLevel(thermoStress) {
-  if (thermoStress >= 0 && thermoStress < 68) {
+  if (thermoStress > 0 && thermoStress < 68) {
     return "No thermal Stress";
-  } else if (thermoStress > 68 && thermoStress < 71) {
+  } else if (thermoStress > 67.4 && thermoStress < 72) {
     return "Mild discomfort";
-  } else if (thermoStress > 71 && thermoStress < 75) {
+  } else if (thermoStress > 71.4 && thermoStress < 75) {
     return "Discomfort";
-  } else if (thermoStress > 75 && thermoStress < 79) {
+  } else if (thermoStress > 74.4 && thermoStress < 79) {
     return "Alert";
-  } else if (thermoStress > 79 && thermoStress < 85) {
+  } else if (thermoStress > 78.4 && thermoStress < 84) {
     return "Danger";
-  } else if (thermoStress > 85 && thermoStress < 1000) {
+  } else if (thermoStress > 83.4 && thermoStress < 1000) {
     return "Emergency";
   } else {
     return "404 | try again";
   }
 }
 function getRecommendation(thermoStress) {
-  if (thermoStress >= 0 && thermoStress < 68) {
+  if (thermoStress > 0 && thermoStress < 68) {
     return "Maintain the thermal environment ";
-  } else if (thermoStress > 68 && thermoStress < 72) {
+  } else if (thermoStress > 67.4 && thermoStress < 72) {
     return "Restrict handling to no thermal stress     Avail shade free choice ";
-  } else if (thermoStress >= 72 && thermoStress < 75) {
+  } else if (thermoStress > 71.4 && thermoStress < 75) {
     return "Provide shade free choice.    Do not handle and or work animals ";
-  } else if (thermoStress >= 75 && thermoStress < 79) {
+  } else if (thermoStress > 74.4 && thermoStress < 79) {
     return "Implement cooling measures    Provide plenty of drinking water ";
-  } else if (thermoStress >= 79 && thermoStress < 85) {
+  } else if (thermoStress > 78.4 && thermoStress < 84) {
     return "Ensure plenty airflow (2.8 to 3.4 mph)";
-  } else if (thermoStress >= 85 && thermoStress < 1000) {
+  } else if (thermoStress > 83.4 && thermoStress < 1000) {
     return "Withdraw feed and Keep light off in cattle houses";
   } else {
     return "Un usual experience";
