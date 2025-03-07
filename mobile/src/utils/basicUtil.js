@@ -10,7 +10,11 @@ export const formatToSentenceCase = _sentence => {
         return sentence.charAt(0).toUpperCase() + sentence.slice(1);
     }
 
+<<<<<<< HEAD
     return _sentence;
+=======
+    return ""
+>>>>>>> ff727df (added pending changes)
 };
 
 export const KEYS = {

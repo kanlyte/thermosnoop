@@ -13,6 +13,7 @@ import {
     EDIT_FARM,
     FARMS,
     FORGOT_PASSWD,
+    RESET_PASSWORD,
     HOME,
     NOTIFICATIONS,
     PROFILE,
@@ -25,6 +26,7 @@ import {
     TOOLS,
     VIEW_FARM,
     WELCOME,
+    OTP_PIN,
 } from './src/screens/screens';
 import SignIn from './src/screens/withoutAuth/SignIn';
 import Register from './src/screens/withoutAuth/Register';
@@ -51,6 +53,8 @@ import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 import Support from './src/screens/withAuth/support/Support';
 import Tools from './src/screens/withAuth/tools/Tools';
 import ThermalStressCalculator from './src/screens/withAuth/tools/ThermalStressCalculator';
+import ResetPassword from './src/screens/withoutAuth/ResetPassword';
+import OtpPopup from './src/screens/withoutAuth/Otp';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -168,7 +172,7 @@ const WithAuthStack = () => {
                 name={`_${HOME}`}
                 component={HomeTab}
                 options={{
-                    headerShown: false,
+                headerShown: false,
                 }}
             />
             <Stack.Screen
@@ -185,7 +189,7 @@ const WithAuthStack = () => {
                 name={SUPPORT}
                 component={Support}
                 options={{
-                    headerTitleAlign: 'center',
+                headerTitleAlign: 'center',
                 }}
             />
 
@@ -194,7 +198,7 @@ const WithAuthStack = () => {
                 name={THERMAL_STRESS_CALCULATOR}
                 component={ThermalStressCalculator}
                 options={{
-                    headerTitle: '',
+                headerTitle: '',
                 }}
             />
 
@@ -206,7 +210,7 @@ const WithAuthStack = () => {
                 name={VIEW_FARM}
                 component={ViewFarm}
                 options={{
-                    headerShown: false,
+                headerShown: false,
                 }}
             />
         </Stack.Navigator>
@@ -230,6 +234,8 @@ const withoutAuthStack = () => {
             <Stack.Screen name={SIGN_IN} component={SignIn} />
             <Stack.Screen name={REGISTER} component={Register} />
             <Stack.Screen name={FORGOT_PASSWD} component={ForgotPasswd} />
+            <Stack.Screen name={RESET_PASSWORD} component={ResetPassword} />
+            <Stack.Screen name={OTP_PIN} component={OtpPopup} />
         </Stack.Navigator>
     );
 };

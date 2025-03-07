@@ -12,7 +12,6 @@ const Welcome = () => {
                 style={styles.home_img}
                 source={require('../../assets/home_farm_2.jpg')}
             />
-
             <View>
                 <Text style={styles.txt__main}>Always at your farm</Text>
                 <Text style={styles.txt__sec}>
@@ -21,7 +20,6 @@ const Welcome = () => {
                     <Text style={styles.txt__sup}>anytime</Text>
                 </Text>
             </View>
-
             <View style={{ justifyContent: 'space-around' }}>
                 <TouchableOpacity
                     style={styles.button}

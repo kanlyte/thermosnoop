@@ -94,6 +94,54 @@ export const baseAPI = createApi({
             }),
             invalidatesTags: [TAGS],
         }),
+        sendOtp: build.mutation({
+            query: (email) => ({
+                url: '/request/otp',
+                method: 'POST',
+                data: { email },
+            }),
+            transformResponse: (response) => response?.data,
+        }),
+        verifyUser: build.mutation({
+            query: ({ user_id, otp }) => {
+              return {
+                url: `/verify/email/${user_id}`,
+                method: 'PUT',
+                data: { otp },
+              };
+            },
+            transformResponse: (response) => {
+              console.log('Full Response:', response);
+              return response?.data; 
+            },
+            onError: (error) => {
+              console.error('API Error:', error);
+            }
+          }),
+        sendOtp2: build.mutation({
+            query: (email) => ({
+              url: '/request/otp',
+              method: 'POST',
+              data: { email },
+            }),
+            transformResponse: (response) => response?.data,
+          }),
+        verifyOtp2: build.mutation({
+            query: ({ user_id, otp }) => ({
+              url: `/verify/otp/${user_id}`,
+              method: 'POST',
+              data: { otp },
+            }),
+            transformResponse: (response) => response?.data ?? { status: false, reason: "Response error" },
+          }),
+          resetPassword: build.mutation({
+            query: ({ user_id, password }) => ({
+              url: `/reset/password/${user_id}`,
+              method: 'PUT',
+              data: { password },
+            }),
+            transformResponse: (response) => response?.data,
+          }),
 
         deleteFarm: build.mutation({
             query: farmId => ({
@@ -141,4 +189,9 @@ export const {
     useDeleteFarmMutation,
     useCheckThermalStressMutation,
     useGetHistoricalWeatherQuery,
+    useSendOtpMutation,
+    useVerifyUserMutation,
+    useSendOtp2Mutation,
+    useVerifyOtp2Mutation,
+    useResetPasswordMutation,
 } = baseAPI;
