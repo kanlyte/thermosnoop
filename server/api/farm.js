@@ -280,8 +280,8 @@ router.post("/weather/check", async (req, res) => {
       });
     }
 
-    const apiKey = "5c24a3fc38caaca98b2bae3be3c1deff";
-    const openWeatherMapEndpoint = `https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&units=metric&lang=en&appid=${apiKey}`;
+    const apiKey = "590009db6a82ddcef7f7a7741ec679dc";
+    const openWeatherMapEndpoint = `https://api.openweathermap.org/data/3.0/onecall?lat=${lat}&lon=${lon}&units=metric&lang=en&appid=${apiKey}`;
 
     const response = await axios.get(openWeatherMapEndpoint);
 
