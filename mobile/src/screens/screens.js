@@ -3,6 +3,8 @@ export const WELCOME = 'Welcome';
 export const SIGN_IN = 'Sign In';
 export const REGISTER = 'Register';
 export const FORGOT_PASSWD = 'Forgot Password';
+export const RESET_PASSWORD = 'Reset Password';
+export const OTP_PIN = 'OtpPopup';
 
 // with Auth
 export const HOME = 'Home';

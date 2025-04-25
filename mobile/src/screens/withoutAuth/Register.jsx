@@ -72,10 +72,8 @@ const Register = ({ navigation }) => {
             <Text style={styles.header__sup}>
                 Create account and monitor your farm.
             </Text>
-
             {/* {RenderFormFields(formData)} */}
             <RenderFormFields data={formData} handleChange={handleFormChange} />
-
             <TouchableOpacity
                 style={styles.button}
                 onPress={handleUserRegistration}

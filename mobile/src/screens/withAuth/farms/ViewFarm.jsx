@@ -21,6 +21,7 @@ import {
     KEYS,
     convertGraphTime,
     convertTime,
+    formatDate,
     getItemAsyncStorage,
 } from '../../../utils/basicUtil';
 import Icon from 'react-native-vector-icons/FontAwesome6';
@@ -103,9 +104,7 @@ const ViewFarm = ({ navigation, route }) => {
 
     const graphData = useMemo(() => {
         return {
-            labels: data?.weatherLogs?.map(log =>
-                convertGraphTime(log.createdAt),
-            ),
+            labels: data?.weatherLogs?.map(log => log?.createdAt),
             datasets: [
                 {
                     color: (opacity = 1) => `rgba(0, 255, 0, ${opacity})`,
@@ -117,8 +116,8 @@ const ViewFarm = ({ navigation, route }) => {
 
     const graphConfig = useMemo(() => {
         return {
-            width: Dimensions.get('window').width - 20,
-            height: 250,
+            width: Dimensions.get('window').width - 30,
+            height: 400,
             chartConfig: {
                 backgroundColor: '#ffffff',
                 backgroundGradientFrom: '#ffffff',
@@ -599,16 +598,24 @@ const ViewFarm = ({ navigation, route }) => {
                                         height={graphConfig.height}
                                         chartConfig={graphConfig.chartConfig}
                                         style={styles.graph_style}
+                                        segments={4}
                                         yAxisInterval={1}
                                         bezier
-                                        verticalLabelRotation={22.5}
-                                        segments={3}
+                                        verticalLabelRotation={22}
                                         getDotProps={() => ({
                                             r: 2,
                                             strokeWidth: 1,
                                             stroke: 'darkgreen',
                                         })}
                                         formatYLabel={value => `${value} THI`}
+                                        yLabelsOffset={10}
+                                        formatXLabel={value => {
+                                            const index =
+                                                graphData.labels.indexOf(value);
+                                            return index % 2 === 0
+                                                ? formatDate(value)
+                                                : '';
+                                        }}
                                     />
                                     <Text style={styles.graph_label}>Time</Text>
                                 </>
@@ -670,6 +677,11 @@ const styles = StyleSheet.create({
         // marginBottom: 10,
         // marginLeft: 10
         alignSelf: 'center',
+
+        // borderColor: 'darkgreen',
+        // borderWidth: 0.5,
+        // overflow: 'scroll',
+        // borderRadius: 10,
     },
 
     history_overview__txt: {
@@ -684,6 +696,14 @@ const styles = StyleSheet.create({
         marginVertical: 20,
         marginHorizontal: 10,
         marginBottom: 30,
+        flex: 1,
+        overflow: 'scroll',
+
+        // borderColor: 'darkgreen',
+        // borderWidth: 0.5,
+        // overflow: 'scroll',
+        // borderRadius: 10,
+        // height: 800,
     },
 
     history_overview: {
@@ -694,13 +714,14 @@ const styles = StyleSheet.create({
 
     tab__ctr__history: {
         flex: 1,
-        marginVertical: 10,
+        // marginVertical: 10,
         marginBottom: 20,
         marginHorizontal: 10,
         flexDirection: 'column',
         justifyContent: 'flex-start',
         // borderColor: 'darkgreen',
         // borderWidth: 0.5,
+        // overflow: "scroll"
         // borderRadius: 10,
     },
 
@@ -758,6 +779,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#11360a',
+        overflow: 'scroll',
     },
 
     loading_ctr: {
@@ -835,6 +857,7 @@ const styles = StyleSheet.create({
 
     container__lower: {
         flex: 1,
+        overflow: 'scroll',
         backgroundColor: 'white',
         borderTopRightRadius: 20,
         borderTopLeftRadius: 20,

@@ -47,8 +47,8 @@ const styles = StyleSheet.create({
     capture_att__txt: {
         paddingBottom: 30,
         color: "black",
-        fontWeight: "600",
-        fontSize: 25,
+        fontWeight: "300",
+        fontSize: 20,
         width: "90%",
         alignSelf: "center",
         // textAlign: "center"
@@ -65,7 +65,7 @@ const styles = StyleSheet.create({
     capture_att__txt_act: {
         color: "white",
         fontWeight: "bold",
-        fontSize: 20
+        fontSize: 17
     },
 })
 
