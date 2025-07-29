@@ -68,7 +68,7 @@ export default function LandingPage() {
         {
             icon: Thermometer,
             title: "Real-time Monitoring",
-            description: "Track temperature and humidity levels in your farm in real-time from anywhere.",
+            description: "Receive THI value alerts anytime, anywhere, and make informed decisions with confidence",
         },
         {
             icon: AlertCircle,
@@ -82,8 +82,8 @@ export default function LandingPage() {
         },
         {
             icon: Settings,
-            title: "Custom Thresholds",
-            description: "Set personalized thresholds for different areas of your farm.",
+            title: "Management Interventions",
+            description: "Get Recommendations basing on the THI Value levels of your firm",
         },
         {
             icon: Smartphone,
@@ -92,16 +92,16 @@ export default function LandingPage() {
         },
         {
             icon: Share2,
-            title: "Multi-user Access",
-            description: "Share access with farm managers and workers for collaborative monitoring.",
+            title: "Multiple farm management",
+            description: "Manage and Monitor Multiple firms in from any where across the globe.",
         },
     ]
 
     const useCases = [
         {
             icon: Egg,
-            title: "Poultry Farming",
-            description: "Maintain optimal conditions for chicken health and egg production.",
+            title: "Free range cattle ",
+            description: "Auto detects the THI values of cattle that is grazed in large farms and on a large scale",
         },
         {
             icon: Leaf,
@@ -110,8 +110,8 @@ export default function LandingPage() {
         },
         {
             icon: PiggyBank,
-            title: "Piggery",
-            description: "Ensure proper temperature for pig growth and health.",
+            title: "In door cattle",
+            description: "Monitor the THI of cattle indoor and gives instant recommendations.",
         },
         {
             icon: Droplets,
@@ -142,7 +142,7 @@ export default function LandingPage() {
                             <svg viewBox="0 0 2 2" className="mx-2 inline h-0.5 w-0.5 fill-current">
                                 <circle cx="1" cy="1" r="1" />
                             </svg>
-                            Get 30% off annual subscriptions for a limited time!
+                            Premium plan is soon coming up and shall be offered at a 70% discount on subscription!
                         </p>
                         <Button size="sm" className="bg-white text-green-800 border-none hover:bg-green-100" asChild>
                             <Link href="/pricing">
@@ -171,13 +171,13 @@ export default function LandingPage() {
                 <div className="container mx-auto px-4 md:px-6">
                     <div className="max-w-3xl mx-auto text-center mb-16">
                         <div className="inline-block text-sm font-medium text-white/90 mb-4 uppercase tracking-wider">
-                            Farm Monitoring
+                            Farm Remort Monitoring
                         </div>
                         <h2 className="text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl lg:text-7xl text-white">
-                            Comprehensive Farm Monitoring Solutions
+                            Monitor your cattle farm with Thermosnoop
                         </h2>
                         <p className="text-white/80 mx-auto text-lg max-w-2xl">
-                            ThermoSnoop provides all the tools you need to monitor and optimize your farm's environmental conditions.
+                            Know the thermal stress level of your cattle to increase productivity and reproductive efficiency.
                         </p>
                     </div>
 
@@ -383,7 +383,7 @@ export default function LandingPage() {
                                 </div>
                                 <span className="text-xl font-bold text-green-400">ThermoSnoop</span>
                             </div>
-                            <p className="text-sm text-gray-400 mb-4">Precision farming monitoring for African agriculture.</p>
+                            <p className="text-sm text-gray-400 mb-4">for improved cattle yield</p>
                             <div className="flex gap-4">
                                 <Link href="#" className="text-gray-400 hover:text-green-400">
                                     <svg
@@ -476,11 +476,11 @@ export default function LandingPage() {
                                         Mobile App
                                     </Link>
                                 </li>
-                                <li>
+                                {/* <li>
                                     <Link href="#" className="hover:text-green-400 transition-colors">
                                         Hardware
                                     </Link>
-                                </li>
+                                </li> */}
                             </ul>
                         </div>
                         <div>
@@ -501,11 +501,11 @@ export default function LandingPage() {
                                         FAQs
                                     </Link>
                                 </li>
-                                <li>
+                                {/* <li>
                                     <Link href="#" className="hover:text-green-400 transition-colors">
                                         Community
                                     </Link>
-                                </li>
+                                </li> */}
                             </ul>
                         </div>
                         <div>
@@ -526,11 +526,11 @@ export default function LandingPage() {
                                         Blog
                                     </Link>
                                 </li>
-                                <li>
+                                {/* <li>
                                     <Link href="#" className="hover:text-green-400 transition-colors">
                                         Partners
                                     </Link>
-                                </li>
+                                </li> */}
                             </ul>
                         </div>
                     </div>

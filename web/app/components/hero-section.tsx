@@ -10,12 +10,12 @@ export default function HeroSection() {
         <div className="grid lg:grid-cols-2 gap-12 items-center py-16 md:py-24">
           <div className="space-y-6 text-center lg:text-left">
             <h1 className="text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl lg:text-7xl">
-              <span className="block text-green-600">Monitor Thermal Stress</span>
-              <span className="block text-gray-900">For Healthier Livestock</span>
+              <span className="block text-green-600">Thermosnoop </span>
+              <span className="block text-gray-900">for improved cattle yield</span>
             </h1>
             
             <p className="text-lg text-gray-600 max-w-lg mx-auto lg:mx-0">
-              ThermoSnoop combines temperature and humidity data to estimate thermal stress levels and provide actionable management interventions for your farm.
+              Thermosnoop is a non-invasive, mobile app that combines the effects of ambient temperature and relative humidity to estimate the level of thermal stress, and provides THI level based management interventions.
             </p>
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
@@ -34,22 +34,22 @@ export default function HeroSection() {
             <div className="flex flex-wrap items-center justify-center lg:justify-start gap-4 pt-4">
               <div className="flex items-center gap-2 text-sm text-gray-500">
                 <Thermometer className="h-4 w-4 text-green-600" />
-                <span>Temperature Monitoring</span>
+                <span>THI value forecast</span>
               </div>
               <div className="flex items-center gap-2 text-sm text-gray-500">
                 <Droplets className="h-4 w-4 text-green-600" />
-                <span>Humidity Tracking</span>
+                <span>Management Interventions</span>
               </div>
               <div className="flex items-center gap-2 text-sm text-gray-500">
                 <AlertCircle className="h-4 w-4 text-green-600" />
-                <span>Stress Alerts</span>
+                <span>THI Value calculator</span>
               </div>
             </div>
           </div>
           
           <div className="relative aspect-square w-full max-w-lg mx-auto">
             <Image
-              src="/hero.jpeg"
+              src="/_hero.png"
               alt="ThermoSnoop app showing thermal stress levels"
               fill
               className="object-contain"
