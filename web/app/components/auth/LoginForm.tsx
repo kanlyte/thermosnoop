@@ -26,6 +26,7 @@ import { Eye, EyeOff, Mail, Lock } from 'lucide-react'
 // Schema and actions
 import { LoginSchema } from '@/lib/schemas'
 import { SocialProviders } from './SocialProviders'
+import { login } from '@/actions/login'
 // import { login } from '@/actions/login'
 
 const MainLoginForm = () => {
@@ -57,22 +58,22 @@ const MainLoginForm = () => {
   })
 
 const onSubmit = (values: z.infer<typeof LoginSchema>) => {
-  //     startTransition(() => {
-  //       login(values).then((data) => {
-  //         if (data?.error) {
-  //           toast.error(data.error)
-  //         }
-  //         if (data?.success) {
-  //           if(data?.message_type === "verify_email"){
-  //             router.push("/confirm-email")
-  //           } else {
-  //             toast.success(data.success)
-  //             form.reset({ email: '', password: '' })
-  //             router.push("/studio")
-  //           }
-  //         }
-  //       })
-  //     })
+     startTransition(() => {
+      login(values)
+        .then((data) => {
+          if (data?.error) {
+            toast.error(data.error);
+          }
+          if (data?.success) {
+            toast.success(data.success);
+            form.reset();
+            router.push("/dashboard");
+          }
+        })
+        .catch(() => {
+          toast.error("Something went wrong");
+        });
+    });
 }
 
 return (

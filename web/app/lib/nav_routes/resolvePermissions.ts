@@ -7,15 +7,6 @@ import { ROUTES } from './routes';
  */
 type Role = 'admin' | 'user';
 
-type NavItem = {
-  id: string;
-  title: string;
-  url?: string;
-  roles?: Role[];
-  items?: NavItem[];
-  [key: string]: any;
-};
-
 export const resolvePermissions = (role: Role) => {
   const allowedRoutes = PERMISSIONS[role] || [];
 
@@ -33,10 +24,10 @@ export const resolvePermissions = (role: Role) => {
 
   // Filter top-level routes
   const filteredNavMain = Object.values(ROUTES)
-    .filter((route: NavItem) => isRouteAllowed(route.id))
-    .map((route: NavItem) => ({
+    .filter(route => isRouteAllowed(route.id))
+    .map(route => ({
       ...route,
-      items: route.items?.filter((item: NavItem) => {
+      items: route.items?.filter((item: { id: string; roles?: Role[] }) => {
         // Check if the nested route has explicit roles
         if (item.roles) {
           return item.roles.includes(role);

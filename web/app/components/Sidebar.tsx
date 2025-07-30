@@ -5,6 +5,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { filterRoutes } from '@/lib/nav_routes/filterRoutes';
 import { NavUser } from '@/components/nav-user';
+import { Session } from 'next-auth';
 import { 
   Sidebar,
   SidebarContent,
@@ -16,7 +17,7 @@ import {
 import { NavMain } from './nav-main';
 import { cn } from '@/lib/utils';
 
-const AppSidebar = () => {
+const AppSidebar = ({ session }: { session: Session }) => {
   const pathname = usePathname();
   const { navMain} = filterRoutes('user');
 
@@ -29,13 +30,13 @@ const AppSidebar = () => {
       isActive: pathname === nestedItem.url,
     })),
   }));
-  const data = {
-    user: {
-      name: 'Guest',
-      email: 'guest@example.com',
-      avatar: '/avatars/shadcn.jpg',
-    },
-  };
+  // const data = {
+  //   user: {
+  //     name: 'Guest',
+  //     email: 'guest@example.com',
+  //     avatar: '/avatars/shadcn.jpg',
+  //   },
+  // };
 
   return (
     <Sidebar className="z-10 border-r bg-gradient-to-b from-background to-muted/20">
@@ -63,7 +64,7 @@ const AppSidebar = () => {
       </SidebarContent>
 
       <SidebarFooter className="p-4 border-t">
-        <NavUser user={data.user} />
+        <NavUser session={session} />
       </SidebarFooter>
     </Sidebar>
   );

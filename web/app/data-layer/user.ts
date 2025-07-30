@@ -17,6 +17,7 @@ import axiosInstance from "@/lib/axiosinstance";
 //     }
 // }
 
+
 export const registerThermosnoopUser = async (
   first_name: string,
   last_name: string,
@@ -34,15 +35,10 @@ export const registerThermosnoopUser = async (
       district,
       password
     });
-
-    if (response.status === 201) {
-      return response.data;
-    }
-    // For any non-201 status, throw an error
-    throw new Error(`Unexpected status code: ${response.status}`);
+    // Return the entire response for the register function to handle
+    return response;
   } catch (error) {
     console.error('Error Saving user details:', error);
-    // Re-throw the error so it can be caught in the register function
     throw error;
   }
 };

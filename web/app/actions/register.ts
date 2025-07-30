@@ -22,31 +22,32 @@ export const register = async (values: z.infer<typeof RegisterSchema>) => {
       password
     );
 
-    // Check for successful response based on your API's structure
-    if (response && response.data && response.data.status === true) {
-      return { success: "User registered successfully! 😊" };
+    // Handle successful response (201 Created)
+    if (response.status === 201) {
+      return { success: response.data.data.message || "User registered successfully! 😊" };
     }
 
-    // Handle case where API returns failure status
-    if (response && response.data && response.data.status === false) {
-      return { error: response.data.data + " 😞" };
-    }
-
-    return { error: "Registration failed - unexpected response format 😞" };
+    return { error: "Registration failed - unexpected response 😞" };
   } catch (error: any) {
     if (error.response) {
+      // Handle error responses from API
+      const errorData = error.response.data;
+      
+      if (errorData && errorData.data) {
+        // Handle structured error messages
+        const errorMessage = typeof errorData.data === 'string' 
+          ? errorData.data 
+          : errorData.data.message || 'Registration failed';
+          
+        return { error: `${errorMessage} 😞` };
+      }
+
+      // Fallback status code handling
       switch (error.response.status) {
         case 400:
-          if (error.response.data.data === "wrong email format") {
-            return { error: "Invalid email format 😞" };
-          } else if (error.response.data.data === "weak password") {
-            return { error: "Password is too weak 😞" };
-          } else if (error.response.data.data === "wrong contact format") {
-            return { error: "Invalid phone number format 😞" };
-          }
-          return { error: error.response.data.data + " 😞" };
+          return { error: "Invalid input data 😞" };
         case 409:
-          return { error: "Email already taken 😞" };
+          return { error: "Email already registered 😞" };
         case 500:
           return { error: "Server error - please try again later 😞" };
         default:
@@ -59,3 +60,4 @@ export const register = async (values: z.infer<typeof RegisterSchema>) => {
     }
   }
 };
+

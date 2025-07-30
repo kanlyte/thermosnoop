@@ -1,10 +1,11 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { redirect } from "next/navigation";
 import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar"
 import AppSidebar from "@/components/Sidebar"
 import DashboardNavbar from "@/components/nav_bar/navbar";
+import { auth } from "@/auth";
+import { redirect } from "next/navigation";
 
 
 export default async function DashboardLayout({
@@ -13,12 +14,14 @@ export default async function DashboardLayout({
   children: React.ReactNode;
 }>) {
 
-  // const session = await auth();
+  const session = await auth();
 
-  //redirect if session is null
-  // if (!session?.user.id) {
-  //   redirect("/auth/login");
-  // }
+  console.log("Session in Dashboard Layout now:", session);     
+
+  // redirect if session is null
+  if (!session?.user.id) {
+    redirect("/auth/login");
+  }
 
   // const roleCheckResult = await loginRoleChecks(session);
 
@@ -29,7 +32,7 @@ export default async function DashboardLayout({
 
   return (
       <SidebarProvider>
-        <AppSidebar/>
+        <AppSidebar session={session}/>
         <main className="w-full bg-sidebar-accent">
           <DashboardNavbar/>
           <div className="p-4 md:gap-8 md:p-4" >
