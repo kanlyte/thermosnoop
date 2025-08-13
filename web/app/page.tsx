@@ -145,8 +145,8 @@ export default function LandingPage() {
                             Premium plan is soon coming up and shall be offered at a 70% discount on subscription!
                         </p>
                         <Button size="sm" className="bg-white text-green-800 border-none hover:bg-green-100" asChild>
-                            <Link href="/pricing">
-                                View Plans <ChevronRight className="ml-2 h-4 w-4" />
+                            <Link href="/auth/login">
+                                Login Now <ChevronRight className="ml-2 h-4 w-4" />
                             </Link>
                         </Button>
                     </div>

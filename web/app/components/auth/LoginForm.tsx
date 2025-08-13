@@ -127,7 +127,7 @@ return (
                       className="p-0 h-auto  hover:text-green-800"
                       type="button"
                     >
-                      <Link href="/auth/reset">Forgot Password?</Link>
+                      <Link href="/auth/forgot-password">Forgot Password?</Link>
                     </Button>
                   </div>
                   <div className="relative">
