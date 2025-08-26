@@ -47,7 +47,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             id: data.user.id,
             name: data.user.first_name,
             email: data.user.email,
-            accessToken: data.accessToken
+            accessToken: data.accessToken 
           };
         } catch (error) {
           console.error("Login error:", error);
@@ -56,4 +56,5 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       }
     })
   ],
+  
 });

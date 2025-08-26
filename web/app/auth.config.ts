@@ -1,37 +1,42 @@
 import type { NextAuthConfig } from "next-auth";
 
 export const authConfig = {
-  trustHost: true,
-  secret: process.env.AUTH_SECRET,
-  session: {
-    strategy: "jwt",
-    maxAge: 1 * 24 * 60 * 60, // 1 day in seconds
-  },
   pages: {
-    signIn: '/auth/login',
-    error: '/auth/error',
+    signIn: "/login",
   },
   callbacks: {
-    async session({ session, token }) {
-      if (token.sub && session.user) {
-        session.user.id = token.sub;
+    authorized({ auth, request: { nextUrl } }) {
+      const isLoggedIn = !!auth?.user;
+      const isOnDashboard = nextUrl.pathname.startsWith("/dashboard");
+      
+      if (isOnDashboard) {
+        if (isLoggedIn) return true;
+        return false; // Redirect unauthenticated users to login page
+      } else if (isLoggedIn) {
+        return Response.redirect(new URL("/dashboard", nextUrl));
       }
-      if (token.email && session.user) {
-        session.user.email = token.email;
-      }
-      if (token.accessToken && session.user) {
-        session.accessToken = token.accessToken;
-      }
-      return session;
+      return true;
     },
+    
+    // Add these callbacks to handle JWT and session
     async jwt({ token, user, account }) {
+      // Initial sign in - add accessToken to token
       if (user && account) {
-        token.sub = user.id;
-        token.email = user.email;
-        token.accessToken = account.access_token;
+        token.accessToken = (user as any).accessToken;
+        token.id = user.id ?? "";
       }
       return token;
     },
+    
+    async session({ session, token }) {
+      // Send accessToken to the client
+      session.accessToken = token.accessToken as string;
+      session.user.id = token.id as string;
+      return session;
+    },
   },
-  providers: [],
+  providers: [], // Add providers via spread
+  session: {
+    strategy: "jwt", // Ensure JWT strategy is used
+  },
 } satisfies NextAuthConfig;

@@ -7,6 +7,7 @@ async function DashboardHome() {
     if (!session?.user.id) {
         redirect("/auth/login");
     }
+    console.log("Session in DashboardHome:", session.accessToken);
   return (
     <div>
       <FarmsList session={session} />

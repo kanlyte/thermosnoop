@@ -6,8 +6,9 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
 import { Session } from 'next-auth';
-import { useEffect, useState } from "react"
+import Link from "next/link"
 import { getFarmsPerUser } from "@/actions/farms"
+import { useEffect, useState } from "react"
 
 // Mock data with farm images and thermostress
 const farms = [
@@ -143,7 +144,9 @@ export default function FarmsList({ session }: { session: Session }) {
             
             <Button className="gap-2 w-full sm:w-auto">
               <Plus className="h-4 w-4" />
+              <Link href="/dashboard/add-farm">
               <span className="sr-only sm:not-sr-only">Add Farm</span>
+              </Link>
             </Button>
           </div>
         </div>
