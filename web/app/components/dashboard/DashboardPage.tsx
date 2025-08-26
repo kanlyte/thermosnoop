@@ -6,6 +6,8 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
 import { Session } from 'next-auth';
+import { useEffect, useState } from "react"
+import { getFarmsPerUser } from "@/actions/farms"
 
 // Mock data with farm images and thermostress
 const farms = [
@@ -42,9 +44,63 @@ const farms = [
     image: "https://images.unsplash.com/photo-1530836369250-ef72a3f5cda8?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80"
   }
 ]
+type MyFarm = {
+  id: number;
+  user_id: number;
+  name: string;
+  district: string;
+  latitude: string;
+  longtude: string;
+  createdAt: string;
+  updatedAt: string;
+  location?: string,
+  temperature?: number;
+  thermostress?: string;
+  image?: string;
+};
 
 export default function FarmsList({ session }: { session: Session }) {
-    console.log("Session in FarmsList:", session);
+  const [my_farms, setFarms] = useState<MyFarm[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchFarms = async () => {
+      if (!session?.user?.id) return;
+      
+      try {
+        setLoading(true);
+        setError(null);
+        const response = await getFarmsPerUser(session.user.id);
+        
+        console.log("API Response:", response); // Debug log
+        
+        if (response.success) {
+          const fetched_farms = response.result.map((farm: MyFarm) => ({
+            ...farm,
+            // Add the additional fields your UI needs
+            location: farm.district, // Using district as location
+            temperature: Math.floor(Math.random() * 15) + 20, // Random temp between 20-35
+            thermostress: ["None", "Low", "Moderate", "High"][Math.floor(Math.random() * 4)],
+            image: `https://source.unsplash.com/random/300x200/?farm,${farm.id}`
+          }));
+          setFarms(fetched_farms);
+        } else {
+          setError(response.error || "Failed to fetch farms");
+          console.error(response.error);
+        }
+      } catch (error) {
+        setError("An unexpected error occurred");
+        console.error("Fetch error:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchFarms();
+  }, [session?.user?.id]);
+
+  console.log("My farms:", my_farms); 
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="p-4 sm:p-6 md:p-8">

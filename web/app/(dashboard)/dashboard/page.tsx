@@ -10,6 +10,7 @@ async function DashboardHome() {
   return (
     <div>
       <FarmsList session={session} />
+      
     </div>
   )
 }
