@@ -1,11 +1,18 @@
 import axiosInstance from "@/lib/axiosinstance";
 import axios from "axios";
+import { he } from "zod/v4/locales";
 
 export const getFarmsPerUser = async (
     user_id: string,
+    accessToken?: string
 )=>{
     try {
-        const response = await axiosInstance.get(`/myfarms/${user_id}`);
+        const response = await axiosInstance.get(`/myfarms/${user_id}`, {
+          headers: { 
+            "Content-Type": "application/json",
+            "accessToken": accessToken,
+           }
+        });
         if(response.data.status === "true" || response.status === 200){
             return {
                 success: "farms retrived successfully",
