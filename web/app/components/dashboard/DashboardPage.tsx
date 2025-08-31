@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
 import { Session } from 'next-auth';
 import Link from "next/link"
-import { getFarmsPerUser } from "@/actions/farms"
+import { getFarmLogs, getFarmsPerUser } from "@/actions/farms"
 import { useEffect, useState } from "react"
 
 // Mock data with farm images and thermostress
@@ -56,8 +56,17 @@ type MyFarm = {
   updatedAt: string;
   location?: string,
   temperature?: number;
-  thermostress?: string;
+  thermoStress?: string;
   image?: string;
+  discomfortLevel:string;
+  hr_thermoStress: string;
+  hr_discomfortLevel: string;
+  recommendation: string;
+  hr_recommendation: string;
+  daily_temp: string;
+  daily_hum: string;
+  weekly_temp: string;
+  weekly_hum: string
 };
 
 export default function FarmsList({ session }: { session: Session }) {
@@ -65,41 +74,63 @@ export default function FarmsList({ session }: { session: Session }) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    const fetchFarms = async () => {
-      if (!session?.user?.id) return;
-      
-      try {
-        setLoading(true);
-        setError(null);
-        const response = await getFarmsPerUser(session.user.id);
-        
-        console.log("API Response:", response); // Debug log
-        
-        if (response.success) {
-          const fetched_farms = response.result.map((farm: MyFarm) => ({
-            ...farm,
-            // Add the additional fields your UI needs
-            location: farm.district, // Using district as location
-            temperature: Math.floor(Math.random() * 15) + 20, // Random temp between 20-35
-            thermostress: ["None", "Low", "Moderate", "High"][Math.floor(Math.random() * 4)],
-            image: `https://source.unsplash.com/random/300x200/?farm,${farm.id}`
-          }));
-          setFarms(fetched_farms);
-        } else {
-          setError(response.error || "Failed to fetch farms");
-          console.error(response.error);
-        }
-      } catch (error) {
-        setError("An unexpected error occurred");
-        console.error("Fetch error:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
+useEffect(() => {
+  const fetchFarms = async () => {
+    if (!session?.user?.id) return;
 
-    fetchFarms();
-  }, [session?.user?.id]);
+    try {
+      setLoading(true);
+      setError(null);
+
+      const response = await getFarmsPerUser(session.user.id, session.accessToken as string);
+
+      if (response.success) {
+        const enrichedFarms = await Promise.all(
+          response.result.map(async (farm: MyFarm) => {
+            let logsData = null;
+            try {
+              const logsResponse = await getFarmLogs(farm.id.toString());
+              if (logsResponse.success && logsResponse.result.length > 0) {
+                // take the latest log (last item in result or first depending on API order)
+                logsData = logsResponse.result[0];
+              }
+            } catch (err) {
+              console.error(`Farm logs fetch failed for farm ${farm.id}`, err);
+            }
+
+            return {
+              ...farm,
+              location: farm.district,
+              image: `https://picsum.photos/seed/${farm.id}/300/200`,
+              thermoStress: logsData?.thermoStress ? Math.round(logsData.thermoStress) : "N/A",
+              discomfortLevel: logsData?.discomfortLevel ?? "N/A",
+              hr_thermoStress: logsData?.hr_thermoStress ?? "N/A",
+              hr_discomfortLevel: logsData?.hr_discomfortLevel ?? "N/A",
+              recommendation: logsData?.recommendation ?? "N/A",
+              hr_recommendation: logsData?.hr_recommendation ?? "N/A",
+              daily_temp: logsData?.daily_temp ?? "N/A",
+              daily_hum: logsData?.daily_hum ?? "N/A",
+              weekly_temp: logsData?.weekly_temp ?? "N/A",
+              weekly_hum: logsData?.weekly_hum ?? "N/A",
+            };
+          })
+        );
+
+        setFarms(enrichedFarms);
+      } else {
+        setError(response.error || "Failed to fetch farms");
+        console.error(response.error);
+      }
+    } catch (error) {
+      setError("An unexpected error occurred");
+      console.error("Fetch error:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  fetchFarms();
+}, [session?.user?.id]);
 
   console.log("My farms:", my_farms); 
   return (
@@ -153,34 +184,39 @@ export default function FarmsList({ session }: { session: Session }) {
 
         {/* Farms Grid - Responsive columns */}
         <div className="grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-          {farms.map((farm) => (
+          {my_farms.map((my_farms) => (
             <Card 
-              key={farm.id} 
+              key={my_farms.id} 
               className="hover:shadow-md transition-shadow overflow-hidden border-gray-200"
             >
               <div className="relative h-36 sm:h-40">
                 <img 
-                  src={farm.image} 
-                  alt={farm.name}
+                  src={my_farms.image} 
+                  alt={my_farms.name}
                   className="w-full h-full object-cover"
                 />
-                <Badge 
-                  variant={
-                    farm.thermostress === "High" ? "destructive" :
-                    farm.thermostress === "Moderate" ? "secondary" :
-                    "default"
-                  }
-                  className="absolute top-2 right-2 px-2 py-1 text-xs sm:text-sm"
-                >
-                  {farm.thermostress} Thermostress
-                </Badge>
+<Badge
+  className={`absolute top-2 right-2 px-2 py-1 text-xs sm:text-sm
+    ${
+      my_farms.discomfortLevel === "No thermal Stress" ? "bg-green-500 text-white" :
+      my_farms.discomfortLevel === "Mild discomfort" ? "bg-yellow-400 text-black" :
+      my_farms.discomfortLevel === "Discomfort" ? "bg-orange-400 text-white" :
+      my_farms.discomfortLevel === "Alert" ? "bg-red-400 text-white" :
+      my_farms.discomfortLevel === "Danger" ? "bg-red-600 text-white" :
+      my_farms.discomfortLevel === "Emergency" ? "bg-purple-700 text-white" :
+      "bg-gray-400 text-white"
+    }
+  `}
+>
+  {my_farms.discomfortLevel}
+</Badge>
               </div>
               
               <CardHeader className="pb-2 sm:pb-3">
-                <CardTitle className="text-base sm:text-lg">{farm.name}</CardTitle>
+                <CardTitle className="text-base sm:text-lg">{my_farms.name}</CardTitle>
                 <div className="flex items-center gap-2 text-xs sm:text-sm text-muted-foreground">
                   <MapPin className="h-3 w-3 sm:h-4 sm:w-4" />
-                  <span>{farm.location}</span>
+                  <span>{my_farms.location}</span>
                 </div>
               </CardHeader>
               
@@ -188,7 +224,7 @@ export default function FarmsList({ session }: { session: Session }) {
                 <div className="flex justify-between items-center">
                   <div className="flex items-center gap-2">
                     <Thermometer className="h-4 w-4 sm:h-5 sm:w-5 text-orange-500" />
-                    <span className="text-sm sm:text-base font-medium">{farm.temperature}°C</span>
+                    <span className="text-sm sm:text-base font-medium">THI Value: {my_farms?.thermoStress}</span>
                   </div>
                 </div>
               </CardContent>
