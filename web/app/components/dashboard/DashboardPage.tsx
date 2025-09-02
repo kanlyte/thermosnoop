@@ -33,6 +33,7 @@ type MyFarm = {
   daily_temp: string;
   daily_hum: string;
   weekly_temp: string;
+  hourly_temp: string;
   weekly_hum: string
 };
 
@@ -79,6 +80,9 @@ export default function FarmsList({ session }: { session: Session }) {
                 daily_hum: logsData?.daily_hum ?? "N/A",
                 weekly_temp: logsData?.weekly_temp ?? "N/A",
                 weekly_hum: logsData?.weekly_hum ?? "N/A",
+                hourly_temp: logsData?.hr_temp ?? "N/A",
+                hourly_hum: logsData?.hr_hum ?? "N/A"
+
               };
             })
           );

@@ -22,14 +22,24 @@ type MyFarm = {
   location?: string;
   thermoStress?: number;
   discomfortLevel: string;
+  temp_value: string;
+  hum_value: string;
+  recommendation: string;
   hr_thermoStress: string;
   hr_discomfortLevel: string;
-  recommendation: string;
+  hourly_temp: string;
+  hourly_hum: string;
   hr_recommendation: string;
   daily_temp: string;
   daily_hum: string;
+  daily_thermoStress: string;
+  daily_discomfortLevel: string;
+  daily_recommendation: string;
   weekly_temp: string;
   weekly_hum: string;
+  weekly_thermoStress: string;
+  weekly_discomfortLevel: string;
+  weekly_recommendation: string;
   image?: string;
 };
 
@@ -84,30 +94,6 @@ export default function FarmDetailClient({
     })
   }
 
-  // Mock forecast data - replace with real data from your API
-  const forecastData = {
-    nextHour: {
-      temp: "24°C",
-      humidity: "85%",
-      thi: 72,
-      discomfort: "Discomfort",
-      recommendation: "Provide shade free choice. Do not handle and or work animals"
-    },
-    tomorrow: {
-      temp: "26°C",
-      humidity: "80%",
-      thi: 75,
-      discomfort: "Alert",
-      recommendation: "Increase ventilation and provide additional water sources"
-    },
-    nextWeek: {
-      temp: "28°C",
-      humidity: "75%",
-      thi: 78,
-      discomfort: "Danger",
-      recommendation: "Limit animal movement and provide cooling systems"
-    }
-  }
 
   // Mock historical data for the chart
   const historicalData = [
@@ -324,7 +310,7 @@ export default function FarmDetailClient({
                   <CardContent>
                     <div className="text-2xl font-bold flex items-center gap-1">
                       <Thermometer className="h-5 w-5 text-orange-500" />
-                      {forecastData.nextHour.temp}
+                      {farm.hourly_temp}
                     </div>
                   </CardContent>
                 </Card>
@@ -336,7 +322,7 @@ export default function FarmDetailClient({
                   <CardContent>
                     <div className="text-2xl font-bold flex items-center gap-1">
                       <Droplets className="h-5 w-5 text-blue-500" />
-                      {forecastData.nextHour.humidity}
+                      {farm.hourly_hum}
                     </div>
                   </CardContent>
                 </Card>
@@ -346,7 +332,7 @@ export default function FarmDetailClient({
                     <CardTitle className="text-sm font-medium text-muted-foreground">THI Value</CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <div className="text-2xl font-bold">{forecastData.nextHour.thi}</div>
+                    <div className="text-2xl font-bold">{farm.hr_thermoStress}</div>
                   </CardContent>
                 </Card>
               </div>
@@ -362,13 +348,13 @@ export default function FarmDetailClient({
                   <div className="space-y-4">
                     <div>
                       <span className="font-medium">Thermal Stress Level: </span>
-                      <Badge className={`ml-2 ${getDiscomfortColor(forecastData.nextHour.discomfort)}`}>
-                        {forecastData.nextHour.discomfort}
+                      <Badge className={`ml-2 ${getDiscomfortColor(farm.hr_discomfortLevel)}`}>
+                        {farm.hr_discomfortLevel}
                       </Badge>
                     </div>
                     <div>
                       <span className="font-medium">Recommendation: </span>
-                      <p className="text-muted-foreground mt-1">{forecastData.nextHour.recommendation}</p>
+                      <p className="text-muted-foreground mt-1">{farm.hr_recommendation}</p>
                     </div>
                   </div>
                 </CardContent>
@@ -385,7 +371,7 @@ export default function FarmDetailClient({
                   <CardContent>
                     <div className="text-2xl font-bold flex items-center gap-1">
                       <Thermometer className="h-5 w-5 text-orange-500" />
-                      {forecastData.tomorrow.temp}
+                      {farm.daily_temp}
                     </div>
                   </CardContent>
                 </Card>
@@ -397,7 +383,7 @@ export default function FarmDetailClient({
                   <CardContent>
                     <div className="text-2xl font-bold flex items-center gap-1">
                       <Droplets className="h-5 w-5 text-blue-500" />
-                      {forecastData.tomorrow.humidity}
+                      {farm.daily_hum}
                     </div>
                   </CardContent>
                 </Card>
@@ -407,7 +393,7 @@ export default function FarmDetailClient({
                     <CardTitle className="text-sm font-medium text-muted-foreground">THI Value</CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <div className="text-2xl font-bold">{forecastData.tomorrow.thi}</div>
+                    <div className="text-2xl font-bold">{farm.daily_thermoStress}</div>
                   </CardContent>
                 </Card>
               </div>
@@ -423,13 +409,13 @@ export default function FarmDetailClient({
                   <div className="space-y-4">
                     <div>
                       <span className="font-medium">Thermal Stress Level: </span>
-                      <Badge className={`ml-2 ${getDiscomfortColor(forecastData.tomorrow.discomfort)}`}>
-                        {forecastData.tomorrow.discomfort}
+                      <Badge className={`ml-2 ${getDiscomfortColor(farm.daily_discomfortLevel)}`}>
+                        {farm.daily_discomfortLevel}
                       </Badge>
                     </div>
                     <div>
                       <span className="font-medium">Recommendation: </span>
-                      <p className="text-muted-foreground mt-1">{forecastData.tomorrow.recommendation}</p>
+                      <p className="text-muted-foreground mt-1">{farm.daily_recommendation}</p>
                     </div>
                   </div>
                 </CardContent>
@@ -446,7 +432,7 @@ export default function FarmDetailClient({
                   <CardContent>
                     <div className="text-2xl font-bold flex items-center gap-1">
                       <Thermometer className="h-5 w-5 text-orange-500" />
-                      {forecastData.nextWeek.temp}
+                      {farm.weekly_temp}
                     </div>
                   </CardContent>
                 </Card>
@@ -458,7 +444,7 @@ export default function FarmDetailClient({
                   <CardContent>
                     <div className="text-2xl font-bold flex items-center gap-1">
                       <Droplets className="h-5 w-5 text-blue-500" />
-                      {forecastData.nextWeek.humidity}
+                      {farm.weekly_hum}
                     </div>
                   </CardContent>
                 </Card>
@@ -468,7 +454,7 @@ export default function FarmDetailClient({
                     <CardTitle className="text-sm font-medium text-muted-foreground">THI Value</CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <div className="text-2xl font-bold">{forecastData.nextWeek.thi}</div>
+                    <div className="text-2xl font-bold">{farm.weekly_thermoStress}</div>
                   </CardContent>
                 </Card>
               </div>
@@ -484,13 +470,13 @@ export default function FarmDetailClient({
                   <div className="space-y-4">
                     <div>
                       <span className="font-medium">Thermal Stress Level: </span>
-                      <Badge className={`ml-2 ${getDiscomfortColor(forecastData.nextWeek.discomfort)}`}>
-                        {forecastData.nextWeek.discomfort}
+                      <Badge className={`ml-2 ${getDiscomfortColor(farm.weekly_discomfortLevel)}`}>
+                        {farm.weekly_discomfortLevel}
                       </Badge>
                     </div>
                     <div>
                       <span className="font-medium">Recommendation: </span>
-                      <p className="text-muted-foreground mt-1">{forecastData.nextWeek.recommendation}</p>
+                      <p className="text-muted-foreground mt-1">{farm.weekly_recommendation}</p>
                     </div>
                   </div>
                 </CardContent>
