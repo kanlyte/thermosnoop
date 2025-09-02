@@ -11,40 +11,7 @@ import { getFarmLogs, getFarmsPerUser } from "@/actions/farms"
 import { useEffect, useState } from "react"
 
 // Mock data with farm images and thermostress
-const farms = [
-  {
-    id: 1,
-    name: "Green Valley Farm",
-    location: "Nakuru, Kenya",
-    temperature: 28,
-    thermostress: "Moderate",
-    image: "https://images.unsplash.com/photo-1500382017468-9049fed747ef?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80"
-  },
-  {
-    id: 2,
-    name: "Sunrise Orchards",
-    location: "Kiambu, Kenya",
-    temperature: 26,
-    thermostress: "Low",
-    image: "https://images.unsplash.com/photo-1500595046743-cd271d694d30?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80"
-  },
-  {
-    id: 3,
-    name: "Mountain View Plantation",
-    location: "Kericho, Kenya",
-    temperature: 22,
-    thermostress: "None",
-    image: "https://images.unsplash.com/photo-1523741543316-beb7fc7023d8?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80"
-  },
-  {
-    id: 4,
-    name: "Riverbend Gardens",
-    location: "Kisumu, Kenya",
-    temperature: 30,
-    thermostress: "High",
-    image: "https://images.unsplash.com/photo-1530836369250-ef72a3f5cda8?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80"
-  }
-]
+
 type MyFarm = {
   id: number;
   user_id: number;
@@ -58,7 +25,7 @@ type MyFarm = {
   temperature?: number;
   thermoStress?: string;
   image?: string;
-  discomfortLevel:string;
+  discomfortLevel: string;
   hr_thermoStress: string;
   hr_discomfortLevel: string;
   recommendation: string;
@@ -74,65 +41,65 @@ export default function FarmsList({ session }: { session: Session }) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-useEffect(() => {
-  const fetchFarms = async () => {
-    if (!session?.user?.id) return;
+  useEffect(() => {
+    const fetchFarms = async () => {
+      if (!session?.user?.id) return;
 
-    try {
-      setLoading(true);
-      setError(null);
+      try {
+        setLoading(true);
+        setError(null);
 
-      const response = await getFarmsPerUser(session.user.id, session.accessToken as string);
+        const response = await getFarmsPerUser(session.user.id, session.accessToken as string);
 
-      if (response.success) {
-        const enrichedFarms = await Promise.all(
-          response.result.map(async (farm: MyFarm) => {
-            let logsData = null;
-            try {
-              const logsResponse = await getFarmLogs(farm.id.toString());
-              if (logsResponse.success && logsResponse.result.length > 0) {
-                // take the latest log (last item in result or first depending on API order)
-                logsData = logsResponse.result[0];
+        if (response.success) {
+          const enrichedFarms = await Promise.all(
+            response.result.map(async (farm: MyFarm) => {
+              let logsData = null;
+              try {
+                const logsResponse = await getFarmLogs(farm.id.toString());
+                if (logsResponse.success && logsResponse.result.length > 0) {
+                  // take the latest log (last item in result or first depending on API order)
+                  logsData = logsResponse.result[0];
+                }
+              } catch (err) {
+                console.error(`Farm logs fetch failed for farm ${farm.id}`, err);
               }
-            } catch (err) {
-              console.error(`Farm logs fetch failed for farm ${farm.id}`, err);
-            }
 
-            return {
-              ...farm,
-              location: farm.district,
-              image: `https://picsum.photos/seed/${farm.id}/300/200`,
-              thermoStress: logsData?.thermoStress ? Math.round(logsData.thermoStress) : "N/A",
-              discomfortLevel: logsData?.discomfortLevel ?? "N/A",
-              hr_thermoStress: logsData?.hr_thermoStress ?? "N/A",
-              hr_discomfortLevel: logsData?.hr_discomfortLevel ?? "N/A",
-              recommendation: logsData?.recommendation ?? "N/A",
-              hr_recommendation: logsData?.hr_recommendation ?? "N/A",
-              daily_temp: logsData?.daily_temp ?? "N/A",
-              daily_hum: logsData?.daily_hum ?? "N/A",
-              weekly_temp: logsData?.weekly_temp ?? "N/A",
-              weekly_hum: logsData?.weekly_hum ?? "N/A",
-            };
-          })
-        );
+              return {
+                ...farm,
+                location: farm.district,
+                image: `https://picsum.photos/seed/${farm.id}/300/200`,
+                thermoStress: logsData?.thermoStress ? Math.round(logsData.thermoStress) : "N/A",
+                discomfortLevel: logsData?.discomfortLevel ?? "N/A",
+                hr_thermoStress: logsData?.hr_thermoStress ?? "N/A",
+                hr_discomfortLevel: logsData?.hr_discomfortLevel ?? "N/A",
+                recommendation: logsData?.recommendation ?? "N/A",
+                hr_recommendation: logsData?.hr_recommendation ?? "N/A",
+                daily_temp: logsData?.daily_temp ?? "N/A",
+                daily_hum: logsData?.daily_hum ?? "N/A",
+                weekly_temp: logsData?.weekly_temp ?? "N/A",
+                weekly_hum: logsData?.weekly_hum ?? "N/A",
+              };
+            })
+          );
 
-        setFarms(enrichedFarms);
-      } else {
-        setError(response.error || "Failed to fetch farms");
-        console.error(response.error);
+          setFarms(enrichedFarms);
+        } else {
+          setError(response.error || "Failed to fetch farms");
+          console.error(response.error);
+        }
+      } catch (error) {
+        setError("An unexpected error occurred");
+        console.error("Fetch error:", error);
+      } finally {
+        setLoading(false);
       }
-    } catch (error) {
-      setError("An unexpected error occurred");
-      console.error("Fetch error:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
+    };
 
-  fetchFarms();
-}, [session?.user?.id]);
+    fetchFarms();
+  }, [session?.user?.id]);
 
-  console.log("My farms:", my_farms); 
+  console.log("My farms:", my_farms);
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="p-4 sm:p-6 md:p-8">
@@ -163,20 +130,20 @@ useEffect(() => {
         {/* Farms Section - Mobile responsive */}
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-6 gap-4">
           <h1 className="text-xl sm:text-2xl font-bold tracking-tight">My Farms</h1>
-          
+
           <div className="flex flex-col sm:flex-row w-full sm:w-auto items-stretch sm:items-center gap-3">
             <div className="relative w-full sm:w-48 md:w-64">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-              <Input 
-                placeholder="Search farms..." 
+              <Input
+                placeholder="Search farms..."
                 className="pl-9 w-full"
               />
             </div>
-            
+
             <Button className="gap-2 w-full sm:w-auto">
               <Plus className="h-4 w-4" />
               <Link href="/dashboard/add-farm">
-              <span className="sr-only sm:not-sr-only">Add Farm</span>
+                <span className="sr-only sm:not-sr-only">Add Farm</span>
               </Link>
             </Button>
           </div>
@@ -185,33 +152,32 @@ useEffect(() => {
         {/* Farms Grid - Responsive columns */}
         <div className="grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
           {my_farms.map((my_farms) => (
-            <Card 
-              key={my_farms.id} 
+            <Card
+              key={my_farms.id}
               className="hover:shadow-md transition-shadow overflow-hidden border-gray-200"
             >
               <div className="relative h-36 sm:h-40">
-                <img 
-                  src={my_farms.image} 
+                <img
+                  src={my_farms.image}
                   alt={my_farms.name}
                   className="w-full h-full object-cover"
                 />
-<Badge
-  className={`absolute top-2 right-2 px-2 py-1 text-xs sm:text-sm
-    ${
-      my_farms.discomfortLevel === "No thermal Stress" ? "bg-green-500 text-white" :
-      my_farms.discomfortLevel === "Mild discomfort" ? "bg-yellow-400 text-black" :
-      my_farms.discomfortLevel === "Discomfort" ? "bg-orange-400 text-white" :
-      my_farms.discomfortLevel === "Alert" ? "bg-red-400 text-white" :
-      my_farms.discomfortLevel === "Danger" ? "bg-red-600 text-white" :
-      my_farms.discomfortLevel === "Emergency" ? "bg-purple-700 text-white" :
-      "bg-gray-400 text-white"
-    }
+                <Badge
+                  className={`absolute top-2 right-2 px-2 py-1 text-xs sm:text-sm
+    ${my_farms.discomfortLevel === "No thermal Stress" ? "bg-green-500 text-white" :
+                      my_farms.discomfortLevel === "Mild discomfort" ? "bg-yellow-400 text-black" :
+                        my_farms.discomfortLevel === "Discomfort" ? "bg-orange-400 text-white" :
+                          my_farms.discomfortLevel === "Alert" ? "bg-red-400 text-white" :
+                            my_farms.discomfortLevel === "Danger" ? "bg-red-600 text-white" :
+                              my_farms.discomfortLevel === "Emergency" ? "bg-purple-700 text-white" :
+                                "bg-gray-400 text-white"
+                    }
   `}
->
-  {my_farms.discomfortLevel}
-</Badge>
+                >
+                  {my_farms.discomfortLevel}
+                </Badge>
               </div>
-              
+
               <CardHeader className="pb-2 sm:pb-3">
                 <CardTitle className="text-base sm:text-lg">{my_farms.name}</CardTitle>
                 <div className="flex items-center gap-2 text-xs sm:text-sm text-muted-foreground">
@@ -219,7 +185,7 @@ useEffect(() => {
                   <span>{my_farms.location}</span>
                 </div>
               </CardHeader>
-              
+
               <CardContent className="space-y-2 sm:space-y-3">
                 <div className="flex justify-between items-center">
                   <div className="flex items-center gap-2">
@@ -228,12 +194,14 @@ useEffect(() => {
                   </div>
                 </div>
               </CardContent>
-              
-              <CardFooter>
-                <Button variant="outline" className="w-full text-sm sm:text-base">
-                  View Farm Details
-                </Button>
-              </CardFooter>
+
+               <CardFooter>
+                  <Button variant="outline" className="w-full text-sm sm:text-base" asChild>
+                    <Link href={`/dashboard/${my_farms.id}/farm`}>
+                      View Farm Details
+                    </Link>
+                  </Button>
+                </CardFooter>
             </Card>
           ))}
         </div>
