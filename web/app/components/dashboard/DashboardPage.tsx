@@ -19,22 +19,38 @@ type MyFarm = {
   district: string;
   latitude: string;
   longtude: string;
+  image?: string;
   createdAt: string;
   updatedAt: string;
   location?: string,
-  temperature?: number;
+
+  //current weather data
   thermoStress?: string;
-  image?: string;
   discomfortLevel: string;
+  recommendation: string;
+  humidity?: string;
+  temperature?: number;
+  
+  //hourly weather data
   hr_thermoStress: string;
   hr_discomfortLevel: string;
-  recommendation: string;
   hr_recommendation: string;
+  hourly_temp: string;
+  hourly_hum: string;
+
+  //next day weather data
   daily_temp: string;
   daily_hum: string;
+  daily_thermoStress: string;
+  daily_discomfortLevel: string;
+  daily_recommendation: string;
+
+  //next week weather data
   weekly_temp: string;
-  hourly_temp: string;
   weekly_hum: string
+  weekly_thermoStress: string;
+  weekly_discomfortLevel: string;
+  weekly_recommendation: string;
 };
 
 export default function FarmsList({ session }: { session: Session }) {
@@ -72,21 +88,10 @@ export default function FarmsList({ session }: { session: Session }) {
                 image: `https://picsum.photos/seed/${farm.id}/300/200`,
                 thermoStress: logsData?.thermoStress ? Math.round(logsData.thermoStress) : "N/A",
                 discomfortLevel: logsData?.discomfortLevel ?? "N/A",
-                hr_thermoStress: logsData?.hr_thermoStress ?? "N/A",
-                hr_discomfortLevel: logsData?.hr_discomfortLevel ?? "N/A",
                 recommendation: logsData?.recommendation ?? "N/A",
-                hr_recommendation: logsData?.hr_recommendation ?? "N/A",
-                daily_temp: logsData?.daily_temp ?? "N/A",
-                daily_hum: logsData?.daily_hum ?? "N/A",
-                weekly_temp: logsData?.weekly_temp ?? "N/A",
-                weekly_hum: logsData?.weekly_hum ?? "N/A",
-                hourly_temp: logsData?.hr_temp ?? "N/A",
-                hourly_hum: logsData?.hr_hum ?? "N/A"
-
               };
             })
           );
-
           setFarms(enrichedFarms);
         } else {
           setError(response.error || "Failed to fetch farms");

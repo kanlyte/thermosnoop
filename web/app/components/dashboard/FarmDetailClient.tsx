@@ -58,7 +58,7 @@ export default function FarmDetailClient({
   const [loading, setLoading] = useState(!initialFarm && !initialError)
   const [error, setError] = useState<string | null>(initialError || null)
   const [activeTab, setActiveTab] = useState("current")
-
+  console.log("FarmDetailClient:", initialFarm,)
   // If you need to refetch data periodically, you can keep useEffect
   useEffect(() => {
     // Optional: Add real-time data fetching here if needed
@@ -240,7 +240,7 @@ export default function FarmDetailClient({
               <CardContent>
                 <div className="text-3xl font-bold text-orange-800 flex items-center gap-1">
                   <Thermometer className="h-5 w-5" />
-                  {farm.daily_temp || "N/A"}°C
+                  {farm.temp_value || "N/A"}°C
                 </div>
               </CardContent>
             </Card>
@@ -252,7 +252,7 @@ export default function FarmDetailClient({
               <CardContent>
                 <div className="text-3xl font-bold text-cyan-800 flex items-center gap-1">
                   <Droplets className="h-5 w-5" />
-                  {farm.daily_hum || "N/A"}%
+                  {farm.hum_value || "N/A"}%
                 </div>
               </CardContent>
             </Card>
