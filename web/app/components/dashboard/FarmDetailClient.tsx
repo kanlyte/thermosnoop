@@ -1,6 +1,6 @@
 "use client"
 
-import { Thermometer, MapPin, Droplets, Calendar, AlertTriangle, Clock, ChevronLeft, BarChart3 } from "lucide-react"
+import { Thermometer, MapPin, Droplets, Calendar, AlertTriangle, Clock, ChevronLeft, BarChart3, RefreshCw } from "lucide-react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
@@ -9,6 +9,7 @@ import Link from "next/link"
 import { Skeleton } from "@/components/ui/skeleton"
 import { useState, useEffect } from "react"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { getWeatherData } from "@/actions/farms"
 
 type MyFarm = {
   id: number;
@@ -19,6 +20,7 @@ type MyFarm = {
   longtude: string;
   createdAt: string;
   updatedAt: string;
+  updatedAtLogs?: string;
   location?: string;
   thermoStress?: number;
   discomfortLevel: string;
@@ -58,7 +60,9 @@ export default function FarmDetailClient({
   const [loading, setLoading] = useState(!initialFarm && !initialError)
   const [error, setError] = useState<string | null>(initialError || null)
   const [activeTab, setActiveTab] = useState("current")
+  const [refreshing, setRefreshing] = useState(false)
   console.log("FarmDetailClient:", initialFarm,)
+  const [lastUpdated, setLastUpdated] = useState<string>(new Date().toLocaleString())
   // If you need to refetch data periodically, you can keep useEffect
   useEffect(() => {
     // Optional: Add real-time data fetching here if needed
@@ -104,6 +108,34 @@ export default function FarmDetailClient({
     { date: "Aug 29", thi: 73 },
     { date: "Aug 30", thi: 72 },
   ]
+const handleRefreshWeather = async () => {
+  if (!farm) return;
+  try {
+    setRefreshing(true);
+    setError(null);
+    const weatherResponse = await getWeatherData(
+      parseFloat(farm.latitude),
+      parseFloat(farm.longtude),
+      farm.id.toString()
+    );
+    if (weatherResponse && weatherResponse.success) {
+      console.log("Weather data refreshed successfully");
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      setLastUpdated(new Date().toLocaleString());
+      
+    } else if (weatherResponse && weatherResponse.error) {
+      setError(weatherResponse.error);
+    } else {
+      setError("Unexpected response from weather service");
+    }
+  } catch (error) {
+    console.error("Weather refresh error:", error);
+    setError("Failed to refresh weather data. Please try again.");
+  } finally {
+    setRefreshing(false);
+  }
+};
+console.log("UpdatedAtLogs:", farm?.updatedAtLogs);
 
   if (loading) {
     return (
@@ -195,10 +227,18 @@ export default function FarmDetailClient({
             </div>
           </div>
           <div className="flex items-center gap-2">
-            <span className="text-sm text-muted-foreground">Last updated: {new Date().toLocaleDateString()} {new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
-            <Badge className={`text-sm px-3 py-1 ${getDiscomfortColor(farm.discomfortLevel)}`}>
-              {farm.discomfortLevel}
-            </Badge>
+            <span className="text-sm text-muted-foreground">
+              Last updated: {farm.updatedAtLogs ? new Date(farm.updatedAtLogs).toLocaleDateString() : "N/A"} {farm.updatedAtLogs ? new Date(farm.updatedAtLogs).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : ""}
+            </span>
+            <Button 
+              onClick={handleRefreshWeather}
+              disabled={refreshing}
+              className="gap-2"
+              size="sm"
+            >
+              <RefreshCw className={`h-4 w-4 ${refreshing ? 'animate-spin' : ''}`} />
+              Get Current
+            </Button>
           </div>
         </div>
       </div>

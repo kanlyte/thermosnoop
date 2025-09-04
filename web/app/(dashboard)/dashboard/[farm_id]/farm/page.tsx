@@ -7,8 +7,8 @@ interface FarmDetailPageProps {
   params: Promise<{ farm_id: string }>;
 }
 
-export default async function FarmDetailPage({ 
-  params 
+export default async function FarmDetailPage({
+  params
 }: FarmDetailPageProps) {
   const { farm_id } = await params;
   const session = await auth();
@@ -23,14 +23,13 @@ export default async function FarmDetailPage({
     // Fetch farm data
     const farmsResponse = await getFarmsPerUser(session.user.id, session.accessToken as string)
     console.log("Current User:", session.user);
-    
+
     if (!farmsResponse.success) {
       throw new Error(farmsResponse.error || "Failed to fetch farm data")
     }
-
     // Find the specific farm
     const foundFarm = farmsResponse.result.find((f: any) => f.id.toString() === farm_id)
-    
+
     if (!foundFarm) {
       throw new Error("Farm not found")
     }
@@ -52,6 +51,7 @@ export default async function FarmDetailPage({
       location: foundFarm.district,
       image: `https://picsum.photos/seed/${foundFarm.id}/600/400`,
       thermoStress: logsData?.thermoStress ? Math.round(logsData.thermoStress) : "N/A",
+      updatedAtLogs: logsData?.updatedAt,
       discomfortLevel: logsData?.discomfortLevel ?? "N/A",
       temp_value: logsData?.temp_value ?? "N/A",
       hum_value: logsData?.hum_value ?? "N/A",
@@ -78,9 +78,9 @@ export default async function FarmDetailPage({
 
   } catch (error) {
     // Pass error to client component
-    return <FarmDetailClient 
-      session={session} 
-      initialFarm={null} 
+    return <FarmDetailClient
+      session={session}
+      initialFarm={null}
       error={error instanceof Error ? error.message : "An unexpected error occurred"}
     />
   }

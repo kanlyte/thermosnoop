@@ -49,37 +49,41 @@ export const getFarmsPerUser = async (
   
     }
 }
-
 //get weather data for a farm
 export const getWeatherData = async (
   lat: number,
   lon: number,
   farm_id: string
-)=>{
+) => {
   try {
-    const response = await axiosInstance.get(`/weather/check`)
-    if(response.data.status === "true" || response.status === 200){
-        return {
-            success: "weather retrived successfully",
-            result: response.data.result,
-        }
-    }else{
-        return{
-             error: response.data.data || "An Error Occured"
-        }
+    const response = await axiosInstance.post(`/weather/check`, {
+      lat,
+      lon,
+      farm_id
+    });
+
+    if (response.data.status === true || response.status === 200) {
+      return {
+        success: "Weather retrieved successfully",
+        result: response.data.result,
+      };
+    } else {
+      return {
+        error: response.data.data || "An Error Occurred"
+      };
     }
   } catch (error) {
     if (axios.isAxiosError(error)) {
       if (error.response) {
         switch (error.response.status) {
           case 400:
-            return { error: error.response.data?.reason || "Invalid Request" };
+            return { error: error.response.data?.data || "Invalid Request" };
           case 404:
             return { error: "Weather data not found" };
           case 500:
             return { error: "Server error - please try again later" };
           default:
-            return { error: error.response.data?.data || "An Error Occured" };
+            return { error: error.response.data?.data || "An Error Occurred" };
         }
       } else if (error.request) {
         return { error: "Network error - please check your connection" };
@@ -88,7 +92,9 @@ export const getWeatherData = async (
     if (error instanceof Error) {
       return { error: error.message };
     }
-}}
+    return { error: "An unexpected error occurred" };
+  }
+};
 
 //get farm logs per farm
 export const getFarmLogs = async (
