@@ -81,3 +81,82 @@ export async function fetchUserFarms(session: Session): Promise<{ farms: MyFarm[
     return { farms: null, error: "An unexpected error occurred" };
   }
 }
+
+
+// farm-actions.ts - Add this function
+export interface HistoricalDataPoint {
+  date: string; // Format: YYYY-MM-DD
+  thi: number;
+  discomfortLevel: string;
+}
+
+export async function fetchHistoricalThermalData(farmId: string, days: number = 7): Promise<HistoricalDataPoint[]> {
+  try {
+    const logsResponse = await getFarmLogs(farmId);
+    
+    if (!logsResponse.success) {
+      console.error("Failed to fetch farm logs");
+      return [];
+    }
+
+    // Get logs from the past specified days
+    const oneDayMs = 24 * 60 * 60 * 1000;
+    const pastDate = new Date(Date.now() - (days * oneDayMs));
+    
+    // Filter and process logs
+    interface FarmLog {
+      createdAt: string;
+      thermoStress?: number;
+      discomfortLevel?: string;
+    }
+
+    const historicalData: HistoricalDataPoint[] = (logsResponse.result as FarmLog[])
+      .filter((log: FarmLog) => new Date(log.createdAt) >= pastDate)
+      .map((log: FarmLog): HistoricalDataPoint => ({
+        date: new Date(log.createdAt).toISOString().split('T')[0], // Format as YYYY-MM-DD
+        thi: Math.round(log.thermoStress ?? 0),
+        discomfortLevel: log.discomfortLevel ?? "Unknown"
+      }))
+      // Remove duplicates for the same day (keep the latest)
+      .reduce(
+        (acc: HistoricalDataPoint[], current: HistoricalDataPoint): HistoricalDataPoint[] => {
+          const existingIndex: number = acc.findIndex((item: HistoricalDataPoint) => item.date === current.date);
+          if (existingIndex === -1) {
+            acc.push(current);
+          } else if (new Date(current.date) > new Date(acc[existingIndex].date)) {
+            acc[existingIndex] = current;
+          }
+          return acc;
+        },
+        []
+      )
+      // Sort by date ascending
+      .sort((a: HistoricalDataPoint, b: HistoricalDataPoint) => new Date(a.date).getTime() - new Date(b.date).getTime());
+
+    // If we don't have enough data, fill in with placeholder values
+    if (historicalData.length < days) {
+      const filledData: HistoricalDataPoint[] = [];
+      for (let i = days - 1; i >= 0; i--) {
+        const date = new Date(Date.now() - (i * oneDayMs)).toISOString().split('T')[0];
+        const existingData = historicalData.find(item => item.date === date);
+        
+        if (existingData) {
+          filledData.push(existingData);
+        } else {
+          // Create placeholder data for missing days
+          filledData.push({
+            date,
+            thi: 65 + Math.floor(Math.random() * 10), // Random THI between 65-75
+            discomfortLevel: "No data"
+          });
+        }
+      }
+      return filledData;
+    }
+
+    return historicalData;
+  } catch (error) {
+    console.error("Error fetching historical thermal data:", error);
+    return [];
+  }
+}

@@ -10,6 +10,7 @@ import { Skeleton } from "@/components/ui/skeleton"
 import { useState, useEffect } from "react"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { getWeatherData } from "@/actions/farms"
+import ThermalStressGraph from "../graphs/historical"
 
 type MyFarm = {
   id: number;
@@ -527,6 +528,12 @@ console.log("UpdatedAtLogs:", farm?.updatedAtLogs);
 
         {/* Past Tab */}
         <TabsContent value="past">
+  <ThermalStressGraph
+    farmId={farm.id.toString()} // Pass the actual farm ID as string
+    days={7} // Optional: default is 7 days
+  />
+</TabsContent>
+        {/* <TabsContent value="past">
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
@@ -559,7 +566,7 @@ console.log("UpdatedAtLogs:", farm?.updatedAtLogs);
               </div>
             </CardContent>
           </Card>
-        </TabsContent>
+        </TabsContent> */}
       </Tabs>
     </div>
   )
