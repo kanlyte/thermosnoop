@@ -23,6 +23,7 @@ export const authConfig = {
       // Initial sign in - add accessToken to token
       if (user && account) {
         token.accessToken = (user as any).accessToken;
+        token.refreshToken = (user as any).refreshToken;
         token.id = user.id ?? "";
       }
       return token;
@@ -31,6 +32,7 @@ export const authConfig = {
     async session({ session, token }) {
       // Send accessToken to the client
       session.accessToken = token.accessToken as string;
+      session.refreshToken = token.refreshToken as string;
       session.user.id = token.id as string;
       return session;
     },

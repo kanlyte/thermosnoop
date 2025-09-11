@@ -1,6 +1,6 @@
 import AddFarmForm from "@/components/farm/AddFarmForm";
+import GoogleMapsLoader from "@/components/farm/GoogleMapsLoader";
 import { auth } from "@/auth";
-
 
 const AddFarmPage = async () =>  {
     const session = await auth();
@@ -10,7 +10,9 @@ const AddFarmPage = async () =>  {
     }
     
     return (
-      <AddFarmForm session={session} />
+      <GoogleMapsLoader>
+        <AddFarmForm session={session} />
+      </GoogleMapsLoader>
     );
 }
 

@@ -47,7 +47,7 @@ type MyFarm = {
 };
 
 interface FarmDetailClientProps {
-  session: Session;
+  session: Session | null;
   initialFarm: MyFarm | null;
   error?: string;
 }
@@ -123,6 +123,8 @@ const handleRefreshWeather = async () => {
       console.log("Weather data refreshed successfully");
       await new Promise(resolve => setTimeout(resolve, 1000));
       setLastUpdated(new Date().toLocaleString());
+      
+
       
     } else if (weatherResponse && weatherResponse.error) {
       setError(weatherResponse.error);

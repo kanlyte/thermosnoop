@@ -135,3 +135,52 @@ export const getFarmLogs = async (
     return { error: "An unexpected error occurred" };
   }
 }
+
+export const addFarm = async (
+  farmData: {
+    name: string;
+    district: string;
+    latitude: string;
+    longtude: string;
+    user_id: string;
+    refreshToken: string;
+  },
+  token: string
+) => {
+  try {
+    const response = await axiosInstance.post('/farm', farmData, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (response.data.status) {
+      return { success: response.data.data, farm: response.data.farm };
+    }
+    return { error: response.data.data || "Failed to add farm" };
+
+  } catch (error: unknown) {
+    console.error("Add farm error:", error);
+
+    if (axios.isAxiosError(error)) {
+      if (error.response) {
+        switch (error.response.status) {
+          case 409:
+            return { error: "Farm name already taken" };
+          case 400:
+            return { error: error.response.data?.data || "Invalid farm data" };
+          case 500:
+            return { error: "Server error - please try again later" };
+          default:
+            return { error: error.response.data?.data || "Failed to add farm" };
+        }
+      } else if (error.request) {
+        return { error: "Network error - please check your connection" };
+      }
+    }
+    if (error instanceof Error) {
+      return { error: error.message };
+    }
+    return { error: "An unexpected error occurred" };
+  }
+};
