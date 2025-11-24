@@ -23,9 +23,9 @@ import {
       id: 'tools',
       title: 'Tools',
       icon: PartyPopper,
-      url: '#',
+      url: '/dashboard/tools',
       items: [
-        // { id: 'tools.new', title: 'New', url: '#', roles: [] },
+        { id: 'tools.new', title: 'New', url: '#', roles: [] },
         // { id: 'tools.all', title: 'All Tools', url: '#', roles: [] },
       ],
     },

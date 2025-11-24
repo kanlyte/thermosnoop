@@ -11,7 +11,7 @@ export const requestOtp = async (values: z.infer<typeof RequestOtpSchema>) => {
   }
   const { email } = validatedFields.data;
 
-  try {
+  try { 
     const response = await axiosInstance.post('/request/otp', { email });
 
     // Handle successful response

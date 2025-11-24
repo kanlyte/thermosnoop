@@ -44,7 +44,7 @@ export const ForgotPasswordEmail: React.FC<ForgotPasswordEmailProps> = ({
       
       <p>Best regards,<br/>The Thermosnoop Team</p>
     </div>
-    <div style={{ 
+    <div style={{
       backgroundColor: '#f8f9fa', 
       padding: '20px', 
       textAlign: 'center', 

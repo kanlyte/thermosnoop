@@ -11,7 +11,7 @@ export const register = async (values: z.infer<typeof RegisterSchema>) => {
 
   const { first_name, last_name, email, contact, district, password } =
     validatedFields.data;
-
+ 
   try {
     const response = await registerThermosnoopUser(
       first_name,

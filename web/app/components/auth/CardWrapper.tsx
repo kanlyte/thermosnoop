@@ -27,22 +27,23 @@ export const CardWrapper = ({
   return (
     <div className="min-h-screen flex flex-col items-center justify-center px-4 py-12">
       {/* Optional logo area */}
-   
 
       <Card className="w-full max-w-xl shadow-lg rounded-xl border-baseContent/10">
-       <div className="w-full max-w-md mb-8">
-    <div className="bg-white p-6 rounded-xl flex flex-col items-center">
-      <img
-        src="/logo.webp"
-        alt="Thermosnoop Logo"
-        className="h-16 w-auto mb-4"
-        width={64}
-        height={64}
-      />
-      <h1 className="text-2xl font-bold text-gray-800">Thermosnoop</h1>
-      <p className="text-gray-500 text-sm mt-1">Temperature Monitoring System</p>
-    </div>
-  </div>
+        <div className="w-full max-w-md mb-8">
+          <div className="bg-white p-6 rounded-xl flex flex-col items-center">
+            <img
+              src="/logo.webp"
+              alt="Thermosnoop Logo"
+              className="h-16 w-auto mb-4"
+              width={64}
+              height={64}
+            />
+            <h1 className="text-2xl font-bold text-gray-800">Thermosnoop</h1>
+            <p className="text-gray-500 text-sm mt-1">
+              Thermal Stress Monitoring System
+            </p>
+          </div>
+        </div>
 
         <CardContent className="pb-6">{children}</CardContent>
 
