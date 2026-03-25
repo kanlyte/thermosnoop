@@ -93,19 +93,22 @@ router.post("/login", async (req, res) => {
           status: false,
           data: "user not found",
         });
-      } else {
+      }
+      //  else {
         //check if email is verified
-        if (user.verified != true) {
-          res.status(200).json({
-            status: true,
-            data: "email not verified",
-            emailNotVerified: true,
-            user: {
-              id: user.id,
-              email: user.email,
-            },
-          });
-        } else {
+        // if (user.verified != true) {
+        //   res.status(200).json({
+        //     status: true,
+        //     data: "email not verified",
+        //     emailNotVerified: true,
+        //     user: {
+        //       id: user.id,
+        //       email: user.email,
+        //     },
+        //   });
+        // } 
+        
+        else {
           //decrypt users passowrd
           const original_password = cryptoJs.AES.decrypt(
             user.password,
@@ -162,7 +165,7 @@ router.post("/login", async (req, res) => {
             });
           }
         }
-      }
+      // }
     } else {
       res.status(400).json({
         status: false,
