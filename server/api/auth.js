@@ -303,7 +303,7 @@ router.post("/request/otp", async (req, res) => {
           service: "gmail",
           auth: {
             user: "kanlyteug@gmail.com",
-            pass: "tpepmtgqrfudauwk",
+            pass: "jastbybevrltnzyy",
           },
         });
 
