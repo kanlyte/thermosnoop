@@ -1,54 +1,66 @@
-"use client"
+"use client";
 
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
-import { Button } from "@/components/ui/button"
-import dynamic from 'next/dynamic'
+import dynamic from "next/dynamic";
+import { MapPin } from "lucide-react";
 
-// Dynamically import the map component with SSR disabled
-const DynamicMap = dynamic(() => import('./ClientSideMap'), {
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+
+const DynamicMap = dynamic(() => import("./ClientSideMap"), {
   ssr: false,
   loading: () => (
-    <div className="h-96 w-full flex items-center justify-center bg-gray-100 rounded-lg">
-      <div className="animate-pulse text-gray-500">Loading map...</div>
+    <div className="flex h-full min-h-[420px] w-full items-center justify-center rounded-2xl bg-slate-100">
+      <div className="text-sm text-slate-500">Loading map...</div>
     </div>
-  )
-})
+  ),
+});
 
 interface LocationPickerModalProps {
   region: {
-    latitude: number
-    longitude: number
-  }
-  onSelect: (lat: string, lng: string) => void
-  onClose: () => void
+    latitude: number;
+    longitude: number;
+  };
+  onSelect: (lat: string, lng: string) => void;
+  onClose: () => void;
 }
 
-export function LocationPickerModal({ region, onSelect, onClose }: LocationPickerModalProps) {
+export function LocationPickerModal({
+  region,
+  onSelect,
+  onClose,
+}: LocationPickerModalProps) {
   return (
-    <Dialog open={true} onOpenChange={onClose}>
-      <DialogContent className="max-w-4xl h-[85vh] sm:h-[80vh]">
-        <DialogHeader>
-          <DialogTitle className="text-gray-600 text-lg font-bold text-center">
-            Pick Your Farm's Location
+    <Dialog open onOpenChange={onClose}>
+      <DialogContent className="h-[90vh] max-w-6xl p-0">
+        <DialogHeader className="border-b px-6 py-4">
+          <DialogTitle className="flex items-center gap-2 text-lg font-bold text-slate-900">
+            <MapPin className="h-5 w-5 text-emerald-600" />
+            Pick Your Farm Location
           </DialogTitle>
         </DialogHeader>
-        
-        <div className="h-full w-full flex-1 min-h-[400px]">
+
+        <div className="h-[calc(90vh-145px)] px-6 py-4">
           <DynamicMap region={region} onSelect={onSelect} />
         </div>
-        
-        <div className="flex justify-end gap-2 pt-4 border-t">
+
+        <div className="flex justify-end gap-3 border-t px-6 py-4">
           <Button variant="outline" onClick={onClose}>
             Cancel
           </Button>
-          <Button 
+
+          <Button
             onClick={onClose}
-            className="bg-darkgreen hover:bg-darkgreen/90"
+            className="bg-emerald-600 hover:bg-emerald-700"
           >
             Submit Location
           </Button>
         </div>
       </DialogContent>
     </Dialog>
-  )
+  );
 }

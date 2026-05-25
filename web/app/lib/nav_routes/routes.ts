@@ -1,20 +1,18 @@
 // routes.ts
 import {
-    SquareTerminal,
-    Bot,
-    PartyPopper,
+    ThermometerSun,
+    Settings,
+    User,
     Frame,
     Settings2,
-    BookOpen,
-    LifeBuoy,
-    Send,
+    Tractor
   } from 'lucide-react';
   
   export const ROUTES = {
     HOME: {
       id: 'home',
       title: 'My Farms',
-      icon: SquareTerminal,
+      icon: Tractor,
       url: '/dashboard',
       items: [
       ],
@@ -22,7 +20,7 @@ import {
     TOOLS: {
       id: 'tools',
       title: 'Tools',
-      icon: PartyPopper,
+      icon: ThermometerSun,
       url: '/dashboard/tools',
       items: [
         { id: 'tools.new', title: 'New', url: '#', roles: [] },
@@ -40,7 +38,7 @@ import {
     USER: {
       id: 'user',
       title: 'User',
-      icon: Bot,
+      icon: User,
       url: '#',
       items: [
         
@@ -49,7 +47,7 @@ import {
     SETTINGS: {
       id: 'settings',
       title: 'Settings',
-      icon: Settings2,
+      icon: Settings,
       url: '#',
       items: [
         { id: 'settings.account', title: 'Profile', url: '/account_settings', roles: [] },

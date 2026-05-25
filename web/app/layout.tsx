@@ -3,6 +3,9 @@ import { Toaster } from "@/components/ui/toaster";
 import "./globals.css";
 import { cn } from "@/lib/utils";
 import localFont from "next/font/local";
+import { Geist } from "next/font/google";
+
+const geist = Geist({subsets:['latin'],variable:'--font-sans'});
 
 const myFont = localFont({
   src: [
@@ -46,7 +49,7 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" className={cn("font-sans", geist.variable)}>
       <meta charSet="UTF-8" />
       <body className={cn(myFont.className)}>
         <main className="h-full">{children}</main>

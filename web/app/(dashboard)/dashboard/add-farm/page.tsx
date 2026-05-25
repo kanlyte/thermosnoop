@@ -1,19 +1,15 @@
 import AddFarmForm from "@/components/farm/AddFarmForm";
-import GoogleMapsLoader from "@/components/farm/GoogleMapsLoader";
 import { auth } from "@/auth";
+import { redirect } from "next/navigation";
 
-const AddFarmPage = async () =>  {
-    const session = await auth();
+const AddFarmPage = async () => {
+  const session = await auth();
 
-    if (!session) {
-      return <div>You must be logged in to add a farm.</div>;
-    }
-    
-    return (
-      <GoogleMapsLoader>
-        <AddFarmForm session={session} />
-      </GoogleMapsLoader>
-    );
-}
+  if (!session?.user?.id) {
+    redirect("/auth/login");
+  }
+
+  return <AddFarmForm session={session} />;
+};
 
 export default AddFarmPage;

@@ -36,18 +36,18 @@ export const ForgotPasswordForm = () => {
       email: '',
     }
   })
-const onSubmit = (values: z.infer<typeof ForgotPasswordSchema>) => {
-  startTransition(async () => {
-    const result = await requestOtp(values);
-    
-    if (result.success) {
-      toast.success(result.success);
-      router.push(`/auth/verify-otp?email=${encodeURIComponent(values.email)}`);
-    } else {
-      toast.error(result.error);
-    }
-  });
-};
+ const onSubmit = (values: z.infer<typeof ForgotPasswordSchema>) => {
+    startTransition(async () => {
+      const result = await requestOtp(values);
+
+      if (result.success) {
+        toast.success(result.success);
+        router.push(`/auth/verify-otp?email=${encodeURIComponent(values.email)}`);
+      } else {
+        toast.error(result.error || "Failed to send OTP. Please try again.");
+      }
+    });
+  };
 
   return (
     <CardWrapper
