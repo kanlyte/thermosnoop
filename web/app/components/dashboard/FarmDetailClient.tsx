@@ -227,7 +227,7 @@ const handleRefreshWeather = async () => {
       setError(response?.error || "Failed to refresh current weather data.");
       return;
     }
-
+ //keep high
     const latestLog = response.result;
 
     setFarm((prev) => {
