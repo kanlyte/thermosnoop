@@ -1,9 +1,8 @@
 import { ReactNode } from "react";
 import { redirect } from "next/navigation";
 
-import AppSidebar from "@/components/Sidebar";
-import DashboardNavbar from "@/components/nav_bar/navbar";
 import { auth } from "@/auth";
+import DashboardShell from "@/components/dashboard/DashboardShell";
 
 export default async function DashboardLayout({
   children,
@@ -16,19 +15,5 @@ export default async function DashboardLayout({
     redirect("/auth/login");
   }
 
-  return (
-    <div className="min-h-screen w-full bg-[#f7f8fa]">
-      {/* Sidebar */}
-      <AppSidebar session={session} />
-
-      {/* Main Content */}
-      <div className="min-h-screen md:ml-[220px] lg:ml-[280px]">
-        <DashboardNavbar session={session} />
-
-        <main className="bg-[#f7f8fa] p-4">
-          {children}
-        </main>
-      </div>
-    </div>
-  );
+  return <DashboardShell session={session}>{children}</DashboardShell>;
 }

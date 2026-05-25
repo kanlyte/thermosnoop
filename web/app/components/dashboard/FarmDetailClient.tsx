@@ -18,7 +18,7 @@ import Link from "next/link";
 import { Session } from "next-auth";
 import { useEffect, useState } from "react";
 
-import { getWeatherData } from "@/actions/farms";
+import { getFarmLogs, getWeatherData, refreshFarmCurrentWeather } from "@/actions/farms";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -85,6 +85,89 @@ const formatDateTime = (dateString?: string) => {
   });
 };
 
+const updateFarmFromLog = (prev: MyFarm, log: any): MyFarm => {
+  return {
+    ...prev,
+
+    thermoStress:
+      log?.thermoStress !== undefined
+        ? toTwoDecimal(log.thermoStress)
+        : prev.thermoStress,
+
+    updatedAtLogs: log?.updatedAt || new Date().toISOString(),
+
+    discomfortLevel: log?.discomfortLevel ?? prev.discomfortLevel,
+
+    temp_value:
+      log?.temp_value !== undefined
+        ? toTwoDecimal(log.temp_value)
+        : prev.temp_value,
+
+    hum_value:
+      log?.hum_value !== undefined ? toTwoDecimal(log.hum_value) : prev.hum_value,
+
+    recommendation: log?.recommendation ?? prev.recommendation,
+
+    hourly_temp:
+      log?.hr_temp !== undefined ? toTwoDecimal(log.hr_temp) : prev.hourly_temp,
+
+    hourly_hum:
+      log?.hr_hum !== undefined ? toTwoDecimal(log.hr_hum) : prev.hourly_hum,
+
+    hr_thermoStress:
+      log?.hr_thermoStress !== undefined
+        ? toTwoDecimal(log.hr_thermoStress)
+        : prev.hr_thermoStress,
+
+    hr_discomfortLevel:
+      log?.hr_discomfortLevel ?? prev.hr_discomfortLevel,
+
+    hr_recommendation: log?.hr_recommendation ?? prev.hr_recommendation,
+
+    daily_temp:
+      log?.daily_temp !== undefined
+        ? toTwoDecimal(log.daily_temp)
+        : prev.daily_temp,
+
+    daily_hum:
+      log?.daily_hum !== undefined
+        ? toTwoDecimal(log.daily_hum)
+        : prev.daily_hum,
+
+    daily_thermoStress:
+      log?.daily_thermoStress !== undefined
+        ? toTwoDecimal(log.daily_thermoStress)
+        : prev.daily_thermoStress,
+
+    daily_discomfortLevel:
+      log?.daily_discomfortLevel ?? prev.daily_discomfortLevel,
+
+    daily_recommendation:
+      log?.daily_recommendation ?? prev.daily_recommendation,
+
+    weekly_temp:
+      log?.weekly_temp !== undefined
+        ? toTwoDecimal(log.weekly_temp)
+        : prev.weekly_temp,
+
+    weekly_hum:
+      log?.weekly_hum !== undefined
+        ? toTwoDecimal(log.weekly_hum)
+        : prev.weekly_hum,
+
+    weekly_thermoStress:
+      log?.weekly_thermoStress !== undefined
+        ? toTwoDecimal(log.weekly_thermoStress)
+        : prev.weekly_thermoStress,
+
+    weekly_discomfortLevel:
+      log?.weekly_discomfortLevel ?? prev.weekly_discomfortLevel,
+
+    weekly_recommendation:
+      log?.weekly_recommendation ?? prev.weekly_recommendation,
+  };
+};
+
 export default function FarmDetailClient({
   session,
   initialFarm,
@@ -127,108 +210,39 @@ export default function FarmDetailClient({
     }
   };
 
-  const handleRefreshWeather = async () => {
-    if (!farm) return;
+const handleRefreshWeather = async () => {
+  if (!farm) return;
 
-    try {
-      setRefreshing(true);
-      setError(null);
+  try {
+    setRefreshing(true);
+    setError(null);
 
-      const weatherResponse = await getWeatherData(
-        parseFloat(farm.latitude),
-        parseFloat(farm.longtude),
-        farm.id.toString()
-      );
+    const response = await refreshFarmCurrentWeather(
+      parseFloat(farm.latitude),
+      parseFloat(farm.longtude),
+      farm.id.toString()
+    );
 
-      if (weatherResponse?.success) {
-        const latestLog = Array.isArray(weatherResponse.result)
-          ? weatherResponse.result[0]
-          : weatherResponse.result;
-
-        setFarm((prev) => {
-          if (!prev) return prev;
-
-          return {
-            ...prev,
-            thermoStress:
-              latestLog?.thermoStress !== undefined
-                ? toTwoDecimal(latestLog.thermoStress)
-                : prev.thermoStress,
-            updatedAtLogs: latestLog?.updatedAt || new Date().toISOString(),
-            discomfortLevel: latestLog?.discomfortLevel ?? prev.discomfortLevel,
-            temp_value:
-              latestLog?.temp_value !== undefined
-                ? toTwoDecimal(latestLog.temp_value)
-                : prev.temp_value,
-            hum_value:
-              latestLog?.hum_value !== undefined
-                ? toTwoDecimal(latestLog.hum_value)
-                : prev.hum_value,
-            recommendation: latestLog?.recommendation ?? prev.recommendation,
-            hourly_temp:
-              latestLog?.hr_temp !== undefined
-                ? toTwoDecimal(latestLog.hr_temp)
-                : prev.hourly_temp,
-            hourly_hum:
-              latestLog?.hr_hum !== undefined
-                ? toTwoDecimal(latestLog.hr_hum)
-                : prev.hourly_hum,
-            hr_thermoStress:
-              latestLog?.hr_thermoStress !== undefined
-                ? toTwoDecimal(latestLog.hr_thermoStress)
-                : prev.hr_thermoStress,
-            hr_discomfortLevel:
-              latestLog?.hr_discomfortLevel ?? prev.hr_discomfortLevel,
-            hr_recommendation:
-              latestLog?.hr_recommendation ?? prev.hr_recommendation,
-            daily_temp:
-              latestLog?.daily_temp !== undefined
-                ? toTwoDecimal(latestLog.daily_temp)
-                : prev.daily_temp,
-            daily_hum:
-              latestLog?.daily_hum !== undefined
-                ? toTwoDecimal(latestLog.daily_hum)
-                : prev.daily_hum,
-            daily_thermoStress:
-              latestLog?.daily_thermoStress !== undefined
-                ? toTwoDecimal(latestLog.daily_thermoStress)
-                : prev.daily_thermoStress,
-            daily_discomfortLevel:
-              latestLog?.daily_discomfortLevel ?? prev.daily_discomfortLevel,
-            daily_recommendation:
-              latestLog?.daily_recommendation ?? prev.daily_recommendation,
-            weekly_temp:
-              latestLog?.weekly_temp !== undefined
-                ? toTwoDecimal(latestLog.weekly_temp)
-                : prev.weekly_temp,
-            weekly_hum:
-              latestLog?.weekly_hum !== undefined
-                ? toTwoDecimal(latestLog.weekly_hum)
-                : prev.weekly_hum,
-            weekly_thermoStress:
-              latestLog?.weekly_thermoStress !== undefined
-                ? toTwoDecimal(latestLog.weekly_thermoStress)
-                : prev.weekly_thermoStress,
-            weekly_discomfortLevel:
-              latestLog?.weekly_discomfortLevel ?? prev.weekly_discomfortLevel,
-            weekly_recommendation:
-              latestLog?.weekly_recommendation ?? prev.weekly_recommendation,
-          };
-        });
-
-        setLastUpdated(new Date().toLocaleString());
-      } else {
-        setError(
-          weatherResponse?.error || "Unexpected response from weather service"
-        );
-      }
-    } catch (error) {
-      console.error("Weather refresh error:", error);
-      setError("Failed to refresh weather data. Please try again.");
-    } finally {
-      setRefreshing(false);
+    if (!response?.success) {
+      setError(response?.error || "Failed to refresh current weather data.");
+      return;
     }
-  };
+
+    const latestLog = response.result;
+
+    setFarm((prev) => {
+      if (!prev) return prev;
+      return updateFarmFromLog(prev, latestLog);
+    });
+
+    setLastUpdated(formatDateTime(latestLog.updatedAt || latestLog.createdAt));
+  } catch (error) {
+    console.error("Weather refresh error:", error);
+    setError("Failed to refresh weather data. Please try again.");
+  } finally {
+    setRefreshing(false);
+  }
+};
 
   const MetricCard = ({
     title,

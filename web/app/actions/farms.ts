@@ -184,3 +184,51 @@ export const addFarm = async (
     return { error: "An unexpected error occurred" };
   }
 };
+
+
+export async function refreshFarmCurrentWeather(
+  latitude: number,
+  longtude: number,
+  farmId: string
+) {
+  try {
+    const weatherResponse = await getWeatherData(latitude, longtude, farmId);
+
+    if (!weatherResponse?.success) {
+      return {
+        success: false,
+        error: weatherResponse?.error || "Failed to fetch current weather.",
+      };
+    }
+
+    // small delay in case backend saves log slightly after weather call
+    await new Promise((resolve) => setTimeout(resolve, 500));
+
+    const logsResponse = await getFarmLogs(farmId);
+
+    if (!logsResponse?.success || !logsResponse.result?.length) {
+      return {
+        success: false,
+        error: "Weather updated, but latest farm log was not found.",
+      };
+    }
+
+    const latestLog = logsResponse.result.sort(
+      (a: any, b: any) =>
+        new Date(b.updatedAt || b.createdAt).getTime() -
+        new Date(a.updatedAt || a.createdAt).getTime()
+    )[0];
+
+    return {
+      success: true,
+      result: latestLog,
+    };
+  } catch (error) {
+    console.error("refreshFarmCurrentWeather error:", error);
+
+    return {
+      success: false,
+      error: "Failed to refresh current farm weather.",
+    };
+  }
+}
