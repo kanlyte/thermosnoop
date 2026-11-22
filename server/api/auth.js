@@ -299,22 +299,25 @@ router.post("/request/otp", async (req, res) => {
         // console.log("Saved OTP record:", saveOtp); // Log the saved OTP record
 
         // Create mail transporter
-        const mail_transporter = nodemailer.createTransport({
-          service: "gmail",
-          auth: {
-            user: "kanlyteug@gmail.com",
-            pass: "jastbybevrltnzyy",
-          },
-        });
+      
+       
+      const mail_transporter = nodemailer.createTransport({
+        host: process.env.SMTP_HOST,
+        port: Number(process.env.SMTP_PORT),
+        secure: process.env.SMTP_SECURE === "true",
 
-        // Configure message
-        const mail = {
-          from: `"Thermosnoop"<kanlyteug@gmail.com>`,
+      auth: {
+        user: process.env.SMTP_USER,
+        pass: process.env.SMTP_PASS,
+      },
+    });
+ // Configure message
+    const mail = {
+          from: `"Thermosnoop"<${process.env.SMTP_USER}>`,
           to: user.email,
           subject: "OTP for email verification",
           text: `Hello ${user.last_name}, Your OTP is: ${saveOtp.otp} Please note that it is valid for 3 minutes.`,
         };
-
         try {
           await mail_transporter.sendMail(mail);
           console.log("Email sent successfully."); // Log successful email sending
