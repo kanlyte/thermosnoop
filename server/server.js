@@ -18,6 +18,7 @@ server.get("/api/", (req, res) => {
 // server routes
 server.use("/api", require("./api/auth"));
 server.use("/api", require("./api/farm"));
+server.use("/api", require("./api/iot"));
 
 //database connection
 connect();

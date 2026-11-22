@@ -238,9 +238,124 @@ const Farm = sequelize.define(
     longtude: {
       type: DataTypes.STRING,
     },
+    device_id: {
+      type: DataTypes.STRING,
+      unique: true,
+    },
   },
   {
     tableName: "fw_farm",
+  }
+);
+
+//iot device telemetry log model
+const IotLog = sequelize.define(
+  "fw_iot_logs",
+  {
+    id: {
+      type: DataTypes.INTEGER,
+      primaryKey: true,
+      autoIncrement: true,
+    },
+    device_id: {
+      type: DataTypes.STRING,
+    },
+    farm_id: {
+      type: DataTypes.INTEGER,
+    },
+    temp: {
+      type: DataTypes.DOUBLE,
+    },
+    humidity: {
+      type: DataTypes.DOUBLE,
+    },
+    thi: {
+      type: DataTypes.DOUBLE,
+    },
+    thi_status: {
+      type: DataTypes.STRING,
+    },
+    out_cooler: {
+      type: DataTypes.INTEGER,
+    },
+    out_fan_speed: {
+      type: DataTypes.INTEGER,
+    },
+    out_humidifier: {
+      type: DataTypes.INTEGER,
+    },
+    out_heater: {
+      type: DataTypes.INTEGER,
+    },
+    out_sprinkler: {
+      type: DataTypes.INTEGER,
+    },
+    con_mode: {
+      type: DataTypes.INTEGER,
+    },
+    sen_dht1: {
+      type: DataTypes.INTEGER,
+    },
+    sen_dht2: {
+      type: DataTypes.INTEGER,
+    },
+    wifi_on: {
+      type: DataTypes.INTEGER,
+    },
+    wifi_ssid: {
+      type: DataTypes.STRING,
+    },
+    wifi_ip: {
+      type: DataTypes.STRING,
+    },
+    wifi_signal: {
+      type: DataTypes.INTEGER,
+    },
+    uptime: {
+      type: DataTypes.BIGINT,
+    },
+    free_heap: {
+      type: DataTypes.BIGINT,
+    },
+  },
+  {
+    tableName: "fw_iot_logs",
+    timestamps: true,
+  }
+);
+
+//iot device command queue model
+const IotCommand = sequelize.define(
+  "fw_iot_commands",
+  {
+    id: {
+      type: DataTypes.INTEGER,
+      primaryKey: true,
+      autoIncrement: true,
+    },
+    device_id: {
+      type: DataTypes.STRING,
+    },
+    farm_id: {
+      type: DataTypes.INTEGER,
+    },
+    command: {
+      type: DataTypes.STRING,
+    },
+    payload: {
+      type: DataTypes.JSON,
+    },
+    status: {
+      type: DataTypes.STRING,
+      defaultValue: "pending",
+    },
+    delivered_at: {
+      type: DataTypes.DATE,
+    },
+  },
+  {
+    tableName: "fw_iot_commands",
+    timestamps: true,
   }
 );
 
@@ -276,4 +391,6 @@ module.exports = {
   Logs,
   UserPreference,
   Otp,
+  IotLog,
+  IotCommand,
 };

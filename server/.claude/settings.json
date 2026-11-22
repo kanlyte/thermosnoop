@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "additionalDirectories": [
+      "d:\\kanlyte-projects\\thermosnoop\\mobile\\src\\services",
+      "d:\\kanlyte-projects\\thermosnoop\\mobile"
+    ]
+  }
+}
