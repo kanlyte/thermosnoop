@@ -23,6 +23,7 @@ import {
     SIGN_OUT,
     SUPPORT,
     THERMAL_STRESS_CALCULATOR,
+    IOT_THERMO,
     TOOLS,
     VIEW_FARM,
     WELCOME,
@@ -53,6 +54,7 @@ import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 import Support from './src/screens/withAuth/support/Support';
 import Tools from './src/screens/withAuth/tools/Tools';
 import ThermalStressCalculator from './src/screens/withAuth/tools/ThermalStressCalculator';
+import IotThermo from './src/screens/withAuth/tools/IotThermo';
 import ResetPassword from './src/screens/withoutAuth/ResetPassword';
 import OtpPopup from './src/screens/withoutAuth/Otp';
 
@@ -197,6 +199,14 @@ const WithAuthStack = () => {
             <Stack.Screen
                 name={THERMAL_STRESS_CALCULATOR}
                 component={ThermalStressCalculator}
+                options={{
+                headerTitle: '',
+                }}
+            />
+
+            <Stack.Screen
+                name={IOT_THERMO}
+                component={IotThermo}
                 options={{
                 headerTitle: '',
                 }}

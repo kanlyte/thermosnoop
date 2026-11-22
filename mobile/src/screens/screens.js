@@ -20,3 +20,4 @@ export const EDIT_FARM = 'Edit Farm';
 
 export const TOOLS = 'Tools';
 export const THERMAL_STRESS_CALCULATOR = 'Thermal Stress Calculator';
+export const IOT_THERMO = 'IoT Thermo';

@@ -2,7 +2,7 @@ import { useNavigation } from '@react-navigation/native';
 import React from 'react';
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import FIcon from 'react-native-vector-icons/FontAwesome6';
-import { THERMAL_STRESS_CALCULATOR } from '../../screens';
+import { IOT_THERMO, THERMAL_STRESS_CALCULATOR } from '../../screens';
 
 const Tools = () => {
     const { navigate } = useNavigation();
@@ -25,6 +25,12 @@ const Tools = () => {
                     }
                     title={'Thermal stress calculator'}
                     onClick={() => navigate(THERMAL_STRESS_CALCULATOR)}
+                    showArrow={false}
+                />
+                <ToolItem
+                    Icon={<FIcon name="microchip" color="darkgreen" size={22} />}
+                    title={'IoT Thermo'}
+                    onClick={() => navigate(IOT_THERMO)}
                     showArrow={false}
                 />
                 {/* <ToolItem

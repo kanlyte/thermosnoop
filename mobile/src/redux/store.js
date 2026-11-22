@@ -3,10 +3,12 @@ import authReducer from './slices/authSlice';
 import { PERSIST, REGISTER, persistReducer, persistStore } from 'redux-persist';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { baseAPI } from './apis/baseApi';
+import { iotApi } from './apis/iotApi';
 
 const rootReducer = combineReducers({
     auth: authReducer,
-    [baseAPI.reducerPath]: baseAPI.reducer
+    [baseAPI.reducerPath]: baseAPI.reducer,
+    [iotApi.reducerPath]: iotApi.reducer,
 });
 
 const persistedReducer = persistReducer(
@@ -19,7 +21,7 @@ export const store = configureStore({
     middleware: (getDefaultMiddleware) => getDefaultMiddleware({
         immutableCheck: false,
         serializableCheck: false,
-    }).concat(baseAPI.middleware)
+    }).concat(baseAPI.middleware, iotApi.middleware)
 });
 
 export const persistor = persistStore(store);
